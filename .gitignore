@@ -8,6 +8,7 @@ derby.log
 dist
 *.ear
 *.eprj
+*.fasl
 *.iml
 *.ipr
 *.iws
