@@ -1,21 +1,22 @@
-(require :hunchentoot)
-(require :cl-who)
-(require :postmodern)
+;;; Main dispatch 
 
-;;;(hunchentoot:start (make-instance 'hunchentoot:acceptor :port 8080))
-(defpackage :helloworld
-	(:use :cl :hunchentoot :cl-who))
-
-(in-package :helloworld)
+(in-package #:web)
 
 (defmacro with-html (&body body)
-	`(with-html-output-to-string (*standard-output* nil :prologue t)
+	`(cl-who:with-html-output-to-string (*standard-output* nil :prologue t)
 		 ,@body))
 
-(defun main-page()	(with-html
+(defun main-page()	
+	(with-html
 			(:html
-			 (:head (:title "Hello world"))
-			 (:body 
-				(:h1 "Hello world")))))
+			(:head 
+			 (:title "Hello world"))
+			(:body 
+			 (:h1 "Hello world")))))
 
-(setq *dispatch-table* (list ( create-prefix-dispatcher "/lisp" 'main-page)))
+(setq hunchentoot:*dispatch-table* 
+	(list 
+		( hunchentoot:create-prefix-dispatcher "/" 'main-page)))
+
+(defvar *ht-server* (hunchentoot:start (hunchentoot::make-instance 'hunchentoot:acceptor :port 8080)))
+

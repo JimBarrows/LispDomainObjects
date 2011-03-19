@@ -56,21 +56,21 @@ alter table "party_role" add constraint "role_id_fk" foreign key("role_id") refe
 alter table "party_role" add constraint "party_id_fk" foreign key("party_id") references "parties"("id") on update restrict on delete restrict;
 
 --The relationships the party is involved in
-DROP TABLE IF EXISTS "parties_relationships" CASCADE;
-CREATE TABLE "parties_relationships" (
+DROP TABLE IF EXISTS "party_relationship" CASCADE;
+CREATE TABLE "party_relationship" (
 "id" bigserial NOT NULL,
 "version" bigint,
 "relationship_id" bigint not null,
 "from_party_role_id" bigint NOT NULL,
 "to_party_role_id" bigint NOT NULL,
-"from_date" date,
+"from_date" date default now(),
 "thru_date" date,
 "comment" character varying(255),
 "priority_id" bigint,
 "status_id" bigint,
 "dueto_id" bigint
 );
-ALTER TABLE "parties_relationships" ADD  CONSTRAINT "parties_relationships_pk" PRIMARY KEY("id");
-ALTER TABLE "parties_relationships" ADD  CONSTRAINT "parties_relationships_fk" FOREIGN KEY ("relationship_id") REFERENCES "relationships"("id") ON UPDATE RESTRICT ON DELETE RESTRICT;
-ALTER TABLE "parties_relationships" ADD  CONSTRAINT "from_party_role_fk" FOREIGN KEY ("from_party_role_id") REFERENCES "party_role"("id") ON UPDATE RESTRICT ON DELETE RESTRICT;
-ALTER TABLE "parties_relationships" ADD  CONSTRAINT "to_party_role_fk" FOREIGN KEY ("to_party_role_id") REFERENCES "party_role"("id") ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE "party_relationship" ADD  CONSTRAINT "party_relationship_pk" PRIMARY KEY("id");
+ALTER TABLE "party_relationship" ADD  CONSTRAINT "party_relationshipsfk" FOREIGN KEY ("relationship_id") REFERENCES "relationships"("id") ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE "party_relationship" ADD  CONSTRAINT "from_party_role_fk" FOREIGN KEY ("from_party_role_id") REFERENCES "party_role"("id") ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE "party_relationship" ADD  CONSTRAINT "to_party_role_fk" FOREIGN KEY ("to_party_role_id") REFERENCES "party_role"("id") ON UPDATE RESTRICT ON DELETE RESTRICT;

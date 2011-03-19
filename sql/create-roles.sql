@@ -56,7 +56,12 @@ insert into roles( description,	parent)
 insert into roles( description, parent) 
 	values( 'Household', (select id 
 												from roles 
-												where description='Organization Role'));																												
+												where description='Organization Role'));			
+												
+insert into roles( description, parent) 
+	values( 'Internal Organization', (select id 
+																		from roles 
+																		where description='Organization Role'));																																					
 																												
 insert into roles( description, parent) 
 	values ('Organization Unit', (select id 
@@ -85,13 +90,29 @@ insert into roles( description, parent)
 	values( 'Distributor', (select id 
 													from roles 
 													where description='Distribution Channel'));
-insert into roles( description, parent) 
-	values( 'Internal Organization', (select id 
-																		from roles 
-																		where description='Organization Unit'));
+													
+--Children of Organization Unit													
 insert into roles( description, parent) 
 	values ( 'Parent Organization',(select id 
 																	from roles 
 																	where description='Organization Unit'));
+																	
+insert into roles( description, parent) 
+	values ( 'Subsidiary',(select id 
+												from roles 
+												where description='Organization Unit'));
+												
+insert into roles( description, parent) 
+	values ( 'Department',(select id 
+												from roles 
+												where description='Organization Unit'));												
 
-
+insert into roles( description, parent) 
+	values ( 'Division',(select id 
+												from roles 
+												where description='Organization Unit'));												
+												
+insert into roles( description, parent) 
+	values ( 'Other Organizaiton Unit',(select id 
+												from roles 
+												where description='Organization Unit'));																								
