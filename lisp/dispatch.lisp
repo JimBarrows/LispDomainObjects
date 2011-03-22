@@ -2,17 +2,27 @@
 
 (in-package #:web)
 
-(defmacro with-html (&body body)
-	`(cl-who:with-html-output-to-string (*standard-output* nil :prologue t)
-		 ,@body))
+(+tag-library :html)
+(+tag-library :script)
+
+(deftemplates ;:tag-library-packages( "hh-web-tags")
+	:template-packages( "bizondemand")
+	:templates((hello-world "hello-world.lisp")))
+	
+
+;;(defmacro with-html (&body body)
+;;	(format nil body))
+	;;`(cl-who:with-html-output-to-string (*standard-output* nil :prologue t)
+	;	 ,@body))
 
 (defun main-page()	
-	(with-html
-			(:html
-			(:head 
-			 (:title "Hello world"))
-			(:body 
-			 (:h1 "Hello world")))))
+	(format nil (hello-world)))
+;;	(with-html
+;;			(:html
+;			(:head 
+;			 (:title "Hello world"))
+;			(:body 
+;			 (:h1 "Hello world")))))
 
 (setq hunchentoot:*dispatch-table* 
 	(list 
