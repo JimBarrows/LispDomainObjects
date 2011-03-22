@@ -10,5 +10,5 @@
   (:export :connect-to-db))
 
 (defpackage #:web
-	(:use :cl :asdf :hh-web-tags :hunchentoot)
+	(:use :cl :asdf :cl-who :hunchentoot)
 	(:export :start))

@@ -3,7 +3,7 @@
 (asdf:defsystem #:bizondemand
   :serial t
   :depends-on (#:hunchentoot
-               #:hh-web-tags
+               #:cl-who
                #:postmodern)
   :components ((:file "package")
                (:file "party")
