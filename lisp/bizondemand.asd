@@ -4,7 +4,8 @@
   :serial t
   :depends-on (#:hunchentoot
                #:cl-who
-               #:postmodern)
+               #:postmodern
+							 #:parenscript)
   :components ((:file "package")
                (:file "party")
 							 (:file "dispatch")))
