@@ -1,8 +1,10 @@
 ;;; Main dispatch 
 
-(in-package #:web)
+(in-package :web)
 
 (setf *js-string-delimiter* #\")
+(setf hunchentoot::*show-lisp-errors-p* t)
+(setf *catch-errors-p* t)
 
 (defmacro with-html (&body body)
 	"Wraps the body provided in an html template"
@@ -30,7 +32,7 @@
 								(:script :src (conc "/js/extjs/ux/gridfilters/" grid-extjs)
 												 :type "text/javascript")))
 
-			 (loop for bizondemand-js in '("customisations.js" "utils/BaseForm.js" "business/BusinessWindow.js"
+			 (loop for bizondemand-js in '("customisations.js" "utils/BaseForm.js" "business/Window.js"
 																		 "party/Form.js" "party/Window.js" "products/Goods.js"
 																		 "products/Services.js" "products/Products.js" "bizondemand.js")
 						do (htm
@@ -47,10 +49,22 @@
 	(with-html
 			(:h1 "Hello world")))
 
+
+(hunchentoot:define-easy-handler(get-business :uri "/business"
+																	:default-request-type :get)()
+	(with-html
+		(:h1 "Business")))
+
+(define-easy-handler(create-business :uri "business"
+																		 :default-request-type :post)
+		(business-name)
+	(format t "post-business - ~a" business-name))
+
 (setq hunchentoot:*dispatch-table* 
-			(list 
-			 ( hunchentoot:create-folder-dispatcher-and-handler "/js/" "../javascript/")
-			 ( hunchentoot:create-prefix-dispatcher "/" 'main-page)))
+			(nconc
+			 (list 'hunchentoot::dispatch-easy-handlers
+						 ( hunchentoot:create-folder-dispatcher-and-handler "/js/" "../javascript/")
+						 ( hunchentoot:create-prefix-dispatcher "/" 'main-page))))
 
 (defvar *ht-server* (hunchentoot:start (hunchentoot::make-instance 'hunchentoot:acceptor :port 8080)))
 

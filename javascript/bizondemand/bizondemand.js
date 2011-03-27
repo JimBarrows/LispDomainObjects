@@ -1,24 +1,6 @@
 Ext.namespace('BizOnDemand');
 BizOnDemand.Desktop = Ext.extend(Ext.Viewport, {
 
-    //    ,constructor:function(config) {
-//        // constructor pre-processing - configure listeners here
-//        config = config || {};
-//        config.listeners = config.listeners || {};
-//        Ext.applyIf(config.listeners, {
-//             expand:{scope:this, fn:function() {
-//            }}
-//            ,collapse:{scope:this, fn:function() {
-//            }}
-//        });
-//
-//        
-//        BizOnDemand.Desktop.superclass.constructor.apply(this, arguments);
-//
-//        // constructor post-processing
-//
-//    }, 
-
     initComponent: function() {
 
         var config = {
@@ -57,7 +39,7 @@ BizOnDemand.Desktop = Ext.extend(Ext.Viewport, {
 	        				xtype: 'tbbutton'
  		       				,text: 'Business'
  		       				,handler: function() {
-										var businessWindow = new BizOnDemand.Business.BusinessWindow()
+										var businessWindow = new BizOnDemand.Business.Window()
 										businessWindow.show()
  		       				}
  		       			}

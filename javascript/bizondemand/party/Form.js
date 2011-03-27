@@ -2,21 +2,22 @@ Ext.namespace('Party');
 Party.Form = Ext.extend(Ext.form.FormPanel, {
     
 	id: 'Party.Form'
-  ,url: 'business.json'
-	,waitMessage: 'Please wait.'
-  ,initComponent: function() {
+  , url: '/party.json'
+	, autoload: '/party.json'
+	, waitMessage: 'Please wait.'
+  , initComponent: function() {
   	var config = {
     	items: [{
       	xtype:'textfield'
-        ,id: 'Party.Form.NameField'
-        ,fieldLabel: 'Name'
-        ,allowBlank:false
+        , id: 'Party.Form.NameField'
+        , fieldLabel: 'Name'
+        , allowBlank:false
       }]
-      ,buttons: [{
+      , buttons: [{
       	text:'Submit'
-      	,formBind:true
-      	,scope:this
-      	,handler: this.submit 
+      	, formBind:true
+      	, scope:this
+      	, handler: this.submit 
       }]
     };
 
@@ -32,27 +33,27 @@ Party.Form = Ext.extend(Ext.form.FormPanel, {
     // });
   }
     
-  ,onRender: function() {
+  , onRender: function() {
   	Party.Form.superclass.onRender.apply(this, arguments);
 	}
 	
-	,submit : function(button, event) {
+	, submit : function(button, event) {
 		this.getForm().submit({
     	url: this.url
-    	,scope: this
-    	,waitMsg: this.waitMsg
-    	,success: this.onSuccess
-    	,failure: this.onFailure
+    	, scope: this
+    	, waitMsg: this.waitMsg
+    	, success: this.onSuccess
+    	, failure: this.onFailure
     })
   }
     
-  ,onSuccess: function(form, action) {
+  , onSuccess: function(form, action) {
   	Ext.Msg.show({
     	title: 'Success'
-      ,msg: 'Success!'
-      ,modal: true
-      ,icon: Ext.Msg.INFO
-      ,buttons: Ext.Msg.OK            
+      , msg: 'Success!'
+      , modal: true
+      , icon: Ext.Msg.INFO
+      , buttons: Ext.Msg.OK            
     });
   }
     
