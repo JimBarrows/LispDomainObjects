@@ -49,7 +49,6 @@
 	(with-html
 			(:h1 "Hello world")))
 
-
 (hunchentoot:define-easy-handler(get-business :uri "/business"
 																	:default-request-type :get)()
 	(with-html
@@ -60,11 +59,11 @@
 		(business-name)
 	(format t "post-business - ~a" business-name))
 
-(setq hunchentoot:*dispatch-table* 
+(setq *dispatch-table* 
 			(nconc
-			 (list 'hunchentoot::dispatch-easy-handlers
-						 ( hunchentoot:create-folder-dispatcher-and-handler "/js/" "../javascript/")
-						 ( hunchentoot:create-prefix-dispatcher "/" 'main-page))))
+			 (list 'dispatch-easy-handlers
+						 ( create-folder-dispatcher-and-handler "/js/" "../javascript/")
+						 ( create-prefix-dispatcher "/" 'main-page))))
 
-(defvar *ht-server* (hunchentoot:start (hunchentoot::make-instance 'hunchentoot:acceptor :port 8080)))
+(defvar *ht-server* (start (make-instance 'acceptor :port 8080)))
 

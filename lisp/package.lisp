@@ -1,13 +1,10 @@
 ;;;; package.lisp
 
-(defpackage #:bizondemand-packages
-	( :use :cl :asdf))
+(in-package :cl-user)
 
-(in-package :bizondemand-packages)
-
-(defpackage #:party
+(defpackage "party"
   (:use :cl :postmodern )
   (:export :connect-to-db))
 
-(defpackage :web
+(defpackage "web"
 	(:use :cl :asdf :cl-who :hunchentoot :parenscript))
