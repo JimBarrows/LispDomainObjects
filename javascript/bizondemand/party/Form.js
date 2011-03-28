@@ -2,14 +2,21 @@ Ext.namespace('Party');
 Party.Form = Ext.extend(Ext.form.FormPanel, {
     
 	id: 'Party.Form'
-  , url: '/party.json'
-	, autoload: '/party.json'
+//  , url: '/party.json'
+//	, autoload: '/party.json'
 	, waitMessage: 'Please wait.'
+	
   , initComponent: function() {
   	var config = {
-    	items: [{
+  		monitorValid: true
+  		,autoScrol:true
+    	,items: [{
+				xtype: 'hidden'
+				, name: 'id'
+			},{
       	xtype:'textfield'
         , id: 'Party.Form.NameField'
+        , name: 'name'
         , fieldLabel: 'Name'
         , allowBlank:false
       }]

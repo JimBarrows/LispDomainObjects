@@ -6,11 +6,13 @@ BizOnDemand.Business.Window = Ext.extend(Ext.Window, {
 		var config = {
 				height: 400
 				, width: 400
-				, items: [{
+				, items: [
+						{
 								xtype: 'Party.Form'
 								, url: '/business'
-								, autoLoad: '/business'
+								//, autoLoad: {url:'/business', scope: this}
 								, id: 'BizOnDemand.Business.Form'
+								, height: 200
 						}]
 		};
 
@@ -29,6 +31,9 @@ BizOnDemand.Business.Window = Ext.extend(Ext.Window, {
   ,onRender: function() {
 
 		BizOnDemand.Business.Window.superclass.onRender.apply(this, arguments);
+		Ext.getCmp('BizOnDemand.Business.Form').load({
+			url: '/business'
+		});
 
 	}
 

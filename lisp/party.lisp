@@ -1,6 +1,6 @@
 ;;;; bizondemand.lisp
 
-(in-package #:party)
+(in-package :party)
 
 (defun connect-to-database ()
 	"Connect to database"
@@ -17,6 +17,10 @@
 (defun create-organization (name)
 	"Create a party of type organization, with the given name"
 	(execute ( :insert-into 'parties :set 'type "organization" 'name name)))
+
+(defun find-organization(id)
+	"Find the organization by it's id"
+	(query( :select 'id 'name :from 'parties :where (:= 'id '$1)) id :plist))
 
 (defun add-role-to-party (party-id role-name)
 	"Adds a role, by name to, a party"

@@ -1,11 +1,11 @@
 ;;; Main dispatch 
-
 (in-package :web)
 
 (setf *js-string-delimiter* #\")
 (setf hunchentoot::*show-lisp-errors-p* t)
 (setf *catch-errors-p* t)
 
+(party::connect-to-database)
 (defmacro with-html (&body body)
 	"Wraps the body provided in an html template"
 	
@@ -46,15 +46,15 @@
 			(:body ,@body))))
 
 (defun main-page()	
-	(with-html
-			(:h1 "Hello world")))
+	(with-html ))
 
 (hunchentoot:define-easy-handler(get-business :uri "/business"
 																	:default-request-type :get)()
-	(with-html
-		(:h1 "Business")))
+	(with-html-output-to-string
+			(*standard-output* nil :prologue nil :indent t)
+		(format t "{\"success\":true, \"data\": ~a}" (json::encode-json-plist-to-string (party::find-organization 1)))))
 
-(define-easy-handler(create-business :uri "business"
+(define-easy-handler(create-business :uri "/business"
 																		 :default-request-type :post)
 		(business-name)
 	(format t "post-business - ~a" business-name))
