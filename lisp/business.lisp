@@ -4,7 +4,7 @@
 
 (in-package :business)
 
-(defun get-business()
+(defun find-business()
 	"Gets the main business record from the database."
 	(query(:select 'parties.id 'parties.name 
 								 :from 'parties 'party_role 'roles 
@@ -13,4 +13,4 @@
 													(:in 'roles.description 
 															(:set "Parent Organization" "Internal Organization"))
 													(:= 'roles.id 'party_role.role_id))
-												 (:= 'party_role.party_id 'parties.id)))))
+												 (:= 'party_role.party_id 'parties.id))) :plist))

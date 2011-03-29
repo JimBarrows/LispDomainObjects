@@ -33,6 +33,7 @@ BizOnDemand.Business.Window = Ext.extend(Ext.Window, {
 		BizOnDemand.Business.Window.superclass.onRender.apply(this, arguments);
 		Ext.getCmp('BizOnDemand.Business.Form').load({
 			url: '/business'
+			,method: 'get'
 		});
 
 	}

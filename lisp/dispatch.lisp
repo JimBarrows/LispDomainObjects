@@ -48,22 +48,22 @@
 (defun main-page()	
 	(with-html ))
 
-(hunchentoot:define-easy-handler(get-business :uri "/business"
-																	:default-request-type :get)()
-	(with-html-output-to-string
-			(*standard-output* nil :prologue nil :indent t)
-		(format t "{\"success\":true, \"data\": ~a}" (json::encode-json-plist-to-string (party::find-organization 1)))))
+;(push( create-prefix-dispatcher "/" 'main-page) *dispatch-table*)
 
-(define-easy-handler(create-business :uri "/business"
-																		 :default-request-type :post)
-		(business-name)
-	(format t "post-business - ~a" business-name))
 
-(setq *dispatch-table* 
-			(nconc
-			 (list 'dispatch-easy-handlers
-						 ( create-folder-dispatcher-and-handler "/js/" "../javascript/")
-						 ( create-prefix-dispatcher "/" 'main-page))))
+(define-easy-handler(get-business :uri "/business" :default-request-type :get)()
+	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
+		(format t "{\"success\":true, \"data\": ~a}" 
+						(encode-json-plist-to-string (business::find-business)))))
+
+(setq *default-handler* 'main-page)
+
+;(define-easy-handler(post-business :uri "/business"
+;																		 :default-request-type :post)
+;		(business-name)
+;	(format t "post-business - ~a" business-name))
+
+(push( create-folder-dispatcher-and-handler "/js/" "../javascript/") *dispatch-table*)
 
 (defvar *ht-server* (start (make-instance 'acceptor :port 8080)))
 
