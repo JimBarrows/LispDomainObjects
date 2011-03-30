@@ -50,18 +50,16 @@
 
 ;(push( create-prefix-dispatcher "/" 'main-page) *dispatch-table*)
 
+(setq *default-handler* 'main-page)
 
 (define-easy-handler(get-business :uri "/business" :default-request-type :get)()
 	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
 		(format t "{\"success\":true, \"data\": ~a}" 
 						(encode-json-plist-to-string (business::find-business)))))
 
-(setq *default-handler* 'main-page)
-
-;(define-easy-handler(post-business :uri "/business"
-;																		 :default-request-type :post)
-;		(business-name)
-;	(format t "post-business - ~a" business-name))
+(define-easy-handler(post-business :uri "/business-save" :default-request-type :post)	(business-name)
+	(with-html-output-to-string( *standard-output* nil :prologue nil :indent t)
+		(format t "post-business - ~a" business-name)))
 
 (push( create-folder-dispatcher-and-handler "/js/" "../javascript/") *dispatch-table*)
 

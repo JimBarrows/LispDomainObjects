@@ -9,7 +9,7 @@ BizOnDemand.Business.Window = Ext.extend(Ext.Window, {
 				, items: [
 						{
 								xtype: 'Party.Form'
-								, url: '/business'
+								, url: '/business-save'
 								//, autoLoad: {url:'/business', scope: this}
 								, id: 'BizOnDemand.Business.Form'
 								, height: 200
