@@ -1,5 +1,5 @@
 Ext.namespace('BizOnDemand.Business');
-BizOnDemand.Business.Window = Ext.extend(Ext.Window, {
+BizOnDemand.Business.Window = Ext.extend(Ext.Panel, {
 	
 	initComponent: function() {
  

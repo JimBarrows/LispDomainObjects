@@ -34,7 +34,7 @@
 
 			 (loop for bizondemand-js in '("customisations.js" "utils/BaseForm.js" "business/Window.js"
 																		 "party/Form.js" "party/Window.js" "products/Goods.js"
-																		 "products/Services.js" "products/Products.js" "bizondemand.js")
+																		 "products/Services.js" "products/Products.js" "desktop/Toolbar.js" "Viewport.js")
 						do (htm
 								(:script :src( conc "/js/bizondemand/" bizondemand-js)
 												 :type "text/javascript")))
@@ -42,7 +42,7 @@
 			(:script :type "text/javascript"
 							 (str (ps
 											(*Ext.on-ready( lambda()
-																			 (new (*biz-on-demand.-desktop)))))))
+																			 (new (*biz-on-demand.-viewport)))))))
 			(:body ,@body))))
 
 (defun main-page()	
