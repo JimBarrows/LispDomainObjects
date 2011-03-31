@@ -16,7 +16,11 @@
 
 (defun create-organization (name)
 	"Create a party of type organization, with the given name"
-	(execute ( :insert-into 'parties :set 'type "organization" 'name name)))
+	(execute ( :insert-into 'parties :set 'type "organization" 'name name :returning 'id)))
+
+(defun update-organization (id name)
+	"Update the organization name."
+	(execute ( :update 'parties :set 'name name :where (:= 'id id))))
 
 (defun find-organization(id)
 	"Find the organization by it's id"

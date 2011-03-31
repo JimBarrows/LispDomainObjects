@@ -83,7 +83,7 @@ Party.Form = Ext.extend(Ext.form.FormPanel, {
   }
     
   ,onConnectionFailure: function(form,action) {
-   	Ext.Msg.alert('Failure', 'Ajax communication failed');
+   	Ext.Msg.alert('Failure', action.response.responseText);
   }
     
   ,onServerInvalid: function(form,action) {
