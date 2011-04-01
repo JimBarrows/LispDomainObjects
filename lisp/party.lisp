@@ -16,7 +16,9 @@
 
 (defun create-organization (name)
 	"Create a party of type organization, with the given name"
-	(execute ( :insert-into 'parties :set 'type "organization" 'name name :returning 'id)))
+	(query ( :insert-into 'parties 
+													:set 'type "organization" 'name name 
+													:returning 'id) :single))
 
 (defun update-organization (id name)
 	"Update the organization name."
@@ -32,7 +34,7 @@
 													( :select 'id 
 																	 :from 'roles 
 																	 :where (:= 'description role-name)) 
-													'party_id party-id)))
+													'party-id party-id)))
 
 (defun add-relationship-to-role( relationship-name from-party-role-id to-party-role-id)
 	"Add a relationship to a party-role"

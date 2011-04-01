@@ -17,8 +17,9 @@
 
 (defun save-business( id name)
 	"Save the business, creating it if there is no id, and updatign the name otherwise."
-	(if id (party::update-organization id name) 
+	(if id 
+			(party::update-organization id name) 
 			(progn
-				(let (new-id (create-organization name))
+				(let ((new-id (party::create-organization name)))
 					(party::add-role-to-party new-id "Parent Organization")
 					(party::add-role-to-party new-id "Internal Organization")))))
