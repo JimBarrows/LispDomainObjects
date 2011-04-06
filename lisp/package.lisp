@@ -12,5 +12,9 @@
 	(:use :cl :party :postmodern :s-sql)
 	(:export find-business))
 
+(defpackage templates
+	(:use :cl :cl-who :hunchentoot)
+	(:export with-html))
+
 (defpackage web
 	(:use :cl :asdf :cl-who :hunchentoot :parenscript :json :business :product))

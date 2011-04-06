@@ -11,4 +11,5 @@
                (:file "party")
 							 (:file "business")
 							 (:file "product")
+							 (:file "templates")
 							 (:file "dispatch")))
