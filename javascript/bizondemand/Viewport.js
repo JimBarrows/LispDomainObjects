@@ -1,22 +1,13 @@
 Ext.namespace('BizOnDemand');
 BizOnDemand.Viewport = Ext.extend(Ext.Viewport, {
-
-	initComponent: function() {
-  	var Viewport = this
+	id: 'BizOnDemand.Viewport'
+	,initComponent: function() {
+		var viewport = this;
     var config = {
-    	layout: 'border'
+			layout: 'border'
     	,items: [{
-    		region: 'center'
-    		,xtype: 'panel'
-    		,layout: 'card'
-    		,activeItem: 0
-    		,tbar: {
-    			xtype: 'BizOnDemand.Desktop.Toolbar'
-    			,parentPanel: this
-      	}
-      	,items:[{
-      			xtype:'BizOnDemand.Business.Window'
-    		}]
+				region: 'center'
+    		,xtype: 'BizOnDemand.Desktop.MainPanel'
      	}]
     };
 
@@ -26,10 +17,6 @@ BizOnDemand.Viewport = Ext.extend(Ext.Viewport, {
 
     BizOnDemand.Viewport.superclass.initComponent.apply(this, arguments);
 
-    // after parent code here, e.g. install event handlers
-    // this.on('beforerender', function(dis) {
-    // alert('before render');
-    // });
   }
   ,onRender: function() {
     BizOnDemand.Viewport.superclass.onRender.apply(this, arguments);

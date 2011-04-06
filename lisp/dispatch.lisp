@@ -33,8 +33,9 @@
 												 :type "text/javascript")))
 
 			 (loop for bizondemand-js in '("customisations.js" "utils/BaseForm.js" "business/Window.js"
-																		 "party/Form.js" "party/Window.js" "products/Goods.js"
-																		 "products/Services.js" "products/Products.js" "desktop/Toolbar.js" "Viewport.js")
+																		 "party/Form.js" "party/Window.js" "products/Products.js" "products/Goods.js"
+																		 "products/Services.js" "desktop/Toolbar.js" "desktop/MainPanel.js" 
+																		 "Viewport.js")
 						do (htm
 								(:script :src( conc "/js/bizondemand/" bizondemand-js)
 												 :type "text/javascript")))

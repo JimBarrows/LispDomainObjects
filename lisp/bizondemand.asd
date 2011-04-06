@@ -10,4 +10,5 @@
   :components ((:file "package")
                (:file "party")
 							 (:file "business")
+							 (:file "product")
 							 (:file "dispatch")))

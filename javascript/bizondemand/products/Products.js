@@ -1,24 +1,5 @@
 Ext.namespace('BizOnDemand.Products');
-BizOnDemand.Products.ProductsWindow = Ext.extend(Ext.Window, {
-
-//    ,constructor:function(config) {
-//        // constructor pre-processing - configure listeners here
-//        config = config || {};
-//        config.listeners = config.listeners || {};
-//        Ext.applyIf(config.listeners, {
-//             expand:{scope:this, fn:function() {
-//            }}
-//            ,collapse:{scope:this, fn:function() {
-//            }}
-//        });
-//
-//        
-//        BizOnDemand.Products.ProductsWindow.superclass.constructor.apply(this, arguments);
-//
-//        // constructor post-processing
-//
-//    }, 
-
+BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
 	
 	productStore: new Ext.data.ArrayStore({
 		fields: [
@@ -33,8 +14,10 @@ BizOnDemand.Products.ProductsWindow = Ext.extend(Ext.Window, {
 		]
 	})
 
+	,id : 'BizOnDemand.Products.ProductsPanel'
+
 	,initComponent: function() {
-		dis = this
+		productWindow = this
 		var filters = new Ext.ux.grid.GridFilters({
 			// encode and local configuration options defined previously for easier reuse
 			encode: false // json encode the filter query
@@ -71,13 +54,12 @@ BizOnDemand.Products.ProductsWindow = Ext.extend(Ext.Window, {
 				region:'center'
 				,xtype:'grid'
 				,loadMask:true
-				,store: dis.productStore 
+				,store: productWindow.productStore 
 				,stripeRows:true
 				,autoExpandColumn:'name'
 				,plugins: [ filters]
 				,tbar: {
-					items:[
-						{
+					items:[{
 							text:'Add'
 							,iconCls: 'add'
 						}
@@ -85,13 +67,12 @@ BizOnDemand.Products.ProductsWindow = Ext.extend(Ext.Window, {
 						,{
 							text:'Delete'
 							,iconCls: 'delete'
-						}
-					]
+						}]
 				}
 				,bbar: {
 					xtype: 'paging'
 					,pageSize:25
-					,store: dis.productStore 
+					,store: productWindow.productStore 
 					,displayInfo: true
 					,displayMsg: 'Displaying products {0} - {1} of {2}'
 					,emptyMsg: 'No products to display'
@@ -152,7 +133,7 @@ BizOnDemand.Products.ProductsWindow = Ext.extend(Ext.Window, {
 		Ext.apply(this, config);
 		Ext.apply(this.initialConfig, config);
 
-		BizOnDemand.Products.ProductsWindow.superclass.initComponent.apply(this, arguments);
+		BizOnDemand.Products.ProductsPanel.superclass.initComponent.apply(this, arguments);
 
 		// after parent code here, e.g. install event handlers
 		// this.on('beforerender', function(dis) {
@@ -162,7 +143,7 @@ BizOnDemand.Products.ProductsWindow = Ext.extend(Ext.Window, {
 
   ,onRender: function() {
 
-		BizOnDemand.Products.ProductsWindow.superclass.onRender.apply(this, arguments);
+		BizOnDemand.Products.ProductsPanel.superclass.onRender.apply(this, arguments);
 
 	}
 
@@ -174,4 +155,4 @@ BizOnDemand.Products.ProductsWindow = Ext.extend(Ext.Window, {
     // any other added/overrided methods
 });
 
-Ext.reg('BizOnDemand.Products.ProductsWindow', BizOnDemand.Products.ProductsWindow);
+Ext.reg('BizOnDemand.Products.ProductsPanel', BizOnDemand.Products.ProductsPanel);

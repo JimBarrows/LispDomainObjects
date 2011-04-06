@@ -1,44 +1,29 @@
 Ext.namespace('BizOnDemand.Desktop');
 BizOnDemand.Desktop.Toolbar = Ext.extend(Ext.Toolbar, {
 	parentPanel: undefined
+	,id: 'BizOnDemand.Desktop.Toolbar'
 	,initComponent: function() {
  		var toolbar = this
  		var config = {
  			items: [{
 				xtype: 'tbbutton'
 				,text: 'Products'
-				,menu: [{
-					text:'Inventory'
-					,handler: function( item, event) {
-						alert('Click')
-					} 			       			
-				},{
-					text:'Goods'
-					,handler: function( item, event) {
-						var goodWindow = new BizOnDemand.Products.ProductsWindow()
-						goodWindow.show()
+				,handler: function() {
+						toolbar.parentPanel.getLayout().setActiveItem(1);
 					}
-				},{
-					text:'Services'
-					,handler: function( item, event) {
-						alert('Click')
-					}
-				}]
-			}
+				}
 			,'->'
 			,{
 				xtype: 'tbbutton'
 				,text: 'Business'
 				,handler: function() {
-				//var businessWindow = new BizOnDemand.Business.Window()
-				//businessWindow.show()
-				parentPanel.layout.setActiveItem( 'business')							
-	 		       	}
+										toolbar.parentPanel.layout.setActiveItem( 0)							
+	 		  }
 			}
 			,{
 				xtype: 'tbbutton'
-	 		       	,text: 'Party Form'
-	 		       	,handler: function() {
+	 		  ,text: 'Party Form'
+	 		  ,handler: function() {
 						var w = new Ext.Window( {
 							layout:'fit'
 							,width: 700
