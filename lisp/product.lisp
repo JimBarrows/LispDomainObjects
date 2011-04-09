@@ -3,14 +3,18 @@
 
 (in-package :product)
 
-(defun create-good( name &optional (introduction-date introduction-date-supplied-p) 
-									 sales-discontinuation-date support-discontinuation-date comment)
+(defun create-good( name  )									 
 	"Creates a good in the database.  The database will default introduction-date to today."
-	(query (:insert-into 'goods
+	(query (:insert-into 'products
 											 :set 'name name
-											 'introduction-date indtroduction-date
-											 'sales-discontinuation-date sales-discontinuation-date
-											 'support-discontinuation support-discontinuation-date
-											 'comment comment
 											 :returning 'id) :single))
 
+(defun list-products()
+	"Creates a plist of products returned from the database"
+	 (query( :select 'id 
+									 'name 
+									 'introduction-date 
+									 'sales-discontinuation-date 
+									 'support-discontinuation-date 
+									 'comment :from 'products) 
+				 :plists ))

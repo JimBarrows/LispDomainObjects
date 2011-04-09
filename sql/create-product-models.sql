@@ -10,7 +10,7 @@ create table "products" (
 			 "name" character varying(255) not null,
 			 "introduction_date" date default now(),
 			 "sales_discontinuation_date" date,
-			 "support_discontinutation_date" date,
+			 "support_discontinuation_date" date,
 			 "comment" character varying(255)
 );
 alter table "products" add constraint "products_pk" primary key ("id");
