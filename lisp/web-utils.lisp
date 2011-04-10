@@ -17,4 +17,4 @@
 	 (json:with-explicit-encoder
 		 (json:encode-json-to-string 
 			(add-list-to-the-list 
-			 (add-plist-to-each-record( list-of-plists )))))))
+			 (add-plist-to-each-record list-of-plists ))))))
