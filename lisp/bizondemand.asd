@@ -8,9 +8,10 @@
 							 #:parenscript
 							 #:cl-json)
   :components ((:file "package")
+							 (:file "utils")
                (:file "party")
 							 (:file "business")
 							 (:file "product")
-							 (:file "templates")
+							 (:file "web-templates")
 							 (:file "web-utils")
 							 (:file "dispatch")))

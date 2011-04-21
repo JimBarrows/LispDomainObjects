@@ -1,16 +1,17 @@
 Ext.namespace('BizOnDemand.Products');
 BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
 	
-	productStore: new Ext.data.ArrayStore({
-		fields: [
+	productStore: new Ext.data.JsonStore({
+		autoDestroy: true
+    ,autoLoad: true
+    ,url: '/product-list'
+    ,root: 'data'
+		,fields: [
 			{name: 'name'}
-			,{name:'introduction_date',type:'date', dateFormat: Date.patterns.ISO8601Short}
+			,{name:'introductionDate',type:'date', dateFormat: 'Y-m-d'}
 			,{name:'sales_discontinuation_date',type:'date', dateFormat: Date.patterns.ISO8601Short}
 			,{name:'support_discontinuation_date',type:'date', dateFormat: Date.patterns.ISO8601Short}
 			,{name:'manufactured_by'}
-		]
-		,data: [
-			['Product 1','2001-01-01','2001-01-01','2003-01-01','Someone']
 		]
 	})
 
@@ -29,7 +30,8 @@ BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
 				}
 				,{
 					type: 'date'
-					,dataIndex: 'introduction_date'
+					,dataIndex: 'introductionDate'
+					,format: 'Y-m-d'
 				}
 				,{
 					type: 'date'
@@ -100,11 +102,13 @@ BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
 						,filterable: true
 					}
 					,{
-						id: 'introduction_date'
+						id: 'introductionDate'
+						,xtype:'datecolumn'
 						,header: 'Introduction Date'
 						,sortable: true
-						,dataIndex: 'introduction_date'
+						,dataIndex: 'introductionDate'
 						,filterable: true
+						,format: 'Y-m-d'
 					}
 					,{
 						id: 'sales_discontinuation_date'
@@ -139,17 +143,16 @@ BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
 		// this.on('beforerender', function(dis) {
 		// alert('before render');
 		// });
+
+		this.on('beforeshow', function(thisPanel) {
+		  thisPanel.productStore.load({params:{start:0, limit:25}})
+		});
 	}
 
   ,onRender: function() {
 
 		BizOnDemand.Products.ProductsPanel.superclass.onRender.apply(this, arguments);
 
-	}
-
-	,beforeshow: function( ) {
-
-		this.productStore.load({params:{start:0, limit:25}})
 	}
 
     // any other added/overrided methods
