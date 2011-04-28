@@ -1,7 +1,9 @@
 Ext.namespace('BizOnDemand.Products');
-BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
+BizOnDemand.Products.ProductGrid = Ext.extend(Ext.grid.GridPanel, {
 	
-	productStore: new Ext.data.JsonStore({
+	id : 'BizOnDemand.Products.ProductGrid'
+	
+	,productStore: new Ext.data.JsonStore({
 		autoDestroy: true
     ,autoLoad: true
     ,url: '/product-list'
@@ -14,12 +16,8 @@ BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
 			,{name:'manufactured_by'}
 		]
 	})
-
-	,id : 'BizOnDemand.Products.ProductsPanel'
-
-	,initComponent: function() {
-		productWindow = this
-		var filters = new Ext.ux.grid.GridFilters({
+	
+	,filters: new Ext.ux.grid.GridFilters({
 			// encode and local configuration options defined previously for easier reuse
 			encode: false // json encode the filter query
 			,local: true   // defaults to false (remote filtering)
@@ -47,97 +45,95 @@ BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
 				}
 			]
     })
+
+	,initComponent: function() {
+		productGrid = this
 		var config = {
-      layout: 'border'
-      ,width: 700
+      width: 700
       ,height: 300
 			,title: 'Products'
-      ,items: [{
-				region:'center'
-				,xtype:'grid'
-				,loadMask:true
-				,store: productWindow.productStore 
-				,stripeRows:true
-				,autoExpandColumn:'name'
-				,plugins: [ filters]
-				,tbar: {
-					items:[{
-							text:'Add'
-							,iconCls: 'add'
-						}
-						,'-'
-						,{
-							text:'Delete'
-							,iconCls: 'delete'
-						}]
+			,loadMask:true
+			,store: productGrid.productStore 
+			,stripeRows:true
+			,autoExpandColumn:'name'
+			,plugins: [ productGrid.filters]
+			,tbar: {
+				items:[{
+					text:'Add'
+					,iconCls: 'add'
 				}
-				,bbar: {
-					xtype: 'paging'
-					,pageSize:25
-					,store: productWindow.productStore 
-					,displayInfo: true
-					,displayMsg: 'Displaying products {0} - {1} of {2}'
-					,emptyMsg: 'No products to display'
-					,items: [
-						'-', 
-						{
-							pressed:true
-							,enableToggle: true
-							,text: 'Show Preview'
-							,cls: 'x-btn-text-icon details'
-							,toggleHandler: function(btn, pressed){
-								var view = grid.getView()
-								view.showPreview = pressede
-								view.referesh()
-							}
+				,'-'
+				,{
+					text:'Delete'
+					,iconCls: 'delete'
+				}]
+			}
+			,bbar: {
+				xtype: 'paging'
+				,pageSize:25
+				,store: productGrid.productStore 
+				,displayInfo: true
+				,displayMsg: 'Displaying products {0} - {1} of {2}'
+				,emptyMsg: 'No products to display'
+				,items: [
+					'-', 
+					{
+						pressed:true
+						,enableToggle: true
+						,text: 'Show Preview'
+						,cls: 'x-btn-text-icon details'
+						,toggleHandler: function(btn, pressed){
+							var view = grid.getView()
+							view.showPreview = pressede
+							view.referesh()
 						}
-					]
-				}
-				,columns: [
-					{ 
-						id: 'name'
-						,header: 'Name'
-						,sortable: true
-						,dataIndex: 'name'
-						,filterable: true
-					}
-					,{
-						id: 'introductionDate'
-						,xtype:'datecolumn'
-						,header: 'Introduction Date'
-						,sortable: true
-						,dataIndex: 'introductionDate'
-						,filterable: true
-						,format: 'Y-m-d'
-					}
-					,{
-						id: 'sales_discontinuation_date'
-						,header: 'Sales Discontinuation Date'
-						,sortable: true
-						,dataIndex: 'sales_discontinuation_date'
-						,filterable: true
-					}
-					,{
-						id: 'support_discontinuation_date'
-						,header: 'Support Discontinuation Date'
-						,sortable: true
-						,dataIndex: 'support_discontinuation_date'
-					}
-					,{
-						id: 'manufactured_by'
-						,header: 'Manufactured By'
-						,sortable: true
-						,dataIndex: 'manufactured_by'
 					}
 				]
-			}]
+			}
+			,columns: [
+				{ 
+					id: 'name'
+					,header: 'Name'
+					,sortable: true
+					,dataIndex: 'name'
+					,filterable: true
+				}
+				,{
+					id: 'introductionDate'
+					,xtype:'datecolumn'
+					,header: 'Introduction Date'
+					,sortable: true
+					,dataIndex: 'introductionDate'
+					,filterable: true
+					,format: 'Y-m-d'
+				}
+				,{
+					id: 'sales_discontinuation_date'
+					,header: 'Sales Discontinuation Date'
+					,sortable: true
+					,dataIndex: 'sales_discontinuation_date'
+					,filterable: true
+				}
+				,{
+					id: 'support_discontinuation_date'
+					,header: 'Support Discontinuation Date'
+					,sortable: true
+					,dataIndex: 'support_discontinuation_date'
+				}
+				,{
+					id: 'manufactured_by'
+					,header: 'Manufactured By'
+					,sortable: true
+					,dataIndex: 'manufactured_by'
+				}
+			]
 		};
 
 		// apply config
 		Ext.apply(this, config);
 		Ext.apply(this.initialConfig, config);
 
-		BizOnDemand.Products.ProductsPanel.superclass.initComponent.apply(this, arguments);
+		BizOnDemand.Products.ProductGrid.superclass.initComponent.apply(this, arguments);
 
 		// after parent code here, e.g. install event handlers
 		// this.on('beforerender', function(dis) {
@@ -151,11 +147,11 @@ BizOnDemand.Products.ProductsPanel = Ext.extend(Ext.Panel, {
 
   ,onRender: function() {
 
-		BizOnDemand.Products.ProductsPanel.superclass.onRender.apply(this, arguments);
+		BizOnDemand.Products.ProductGrid.superclass.onRender.apply(this, arguments);
 
 	}
 
     // any other added/overrided methods
 });
 
-Ext.reg('BizOnDemand.Products.ProductsPanel', BizOnDemand.Products.ProductsPanel);
+Ext.reg('BizOnDemand.Products.ProductGrid', BizOnDemand.Products.ProductGrid);

@@ -14,7 +14,7 @@ BizOnDemand.Desktop.MainPanel = Ext.extend(Ext.Panel, {
 												xtype:'BizOnDemand.Business.Window'
 										},{
 												id:'products-panel'
-												,xtype:'BizOnDemand.Products.ProductsPanel'
+												,xtype:'BizOnDemand.Products.ProductGrid'
 										}]
 						}
 						Ext.apply(this, config);
