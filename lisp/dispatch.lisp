@@ -24,7 +24,8 @@
 (define-easy-handler(product-list :uri "/product-list" :default-request-type :get)()
 	(with-html-output-to-string(*standard-output* nil :prologue nil :indent t)
 		(format t "{\"success\": true, \"data\": ~a}"
-						(web-utils::json-encode-list-of-plists( product:list-products)))))
+						(web-utils:json-encode-list-of-plists( 
+																									 web-utils:for-list-of-plists-convert-all-simple-dates-to-y-m-d (product:list-products))))))
 
 (push( create-folder-dispatcher-and-handler "/js/" "../javascript/") *dispatch-table*)
 
