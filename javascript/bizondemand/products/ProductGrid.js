@@ -61,6 +61,18 @@ BizOnDemand.Products.ProductGrid = Ext.extend(Ext.grid.GridPanel, {
 				items:[{
 					text:'Add'
 					,iconCls: 'add'
+					,handler: function( button, event) {
+						var window = new Ext.Window({
+							closable: true
+							,layout: 'fit'
+							,width: 300
+							,height: 300
+							,items: [{
+								xtype: 'bizondemand.products.ProductForm'
+								}]
+							});
+						window.show();
+						}
 				}
 				,'-'
 				,{

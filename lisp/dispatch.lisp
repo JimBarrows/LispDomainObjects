@@ -21,6 +21,12 @@
 	(with-html-output-to-string( *standard-output* nil :prologue nil :indent t)
 		(business::save-business id name)))
 
+(define-easy-handler( product-save :uri "product-save" :default-request-type :post)
+		((name) (product-type))
+	(with-html-output-to-string( *standard-output* nil :prologue nil :indent t)
+		(format t "{\"success\": true, \"data\": ~a}" 
+						(product:save-product( name product-type)))))
+
 (define-easy-handler(product-list :uri "/product-list" :default-request-type :get)()
 	(with-html-output-to-string(*standard-output* nil :prologue nil :indent t)
 		(format t "{\"success\": true, \"data\": ~a}"

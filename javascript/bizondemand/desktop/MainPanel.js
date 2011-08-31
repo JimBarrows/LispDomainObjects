@@ -5,7 +5,7 @@ BizOnDemand.Desktop.MainPanel = Ext.extend(Ext.Panel, {
 						var mainPanel = this;
 						var config = {
 								layout: 'card'
-								,activeItem: 0
+								,activeItem: 1
 								,tbar: {
 										xtype: 'BizOnDemand.Desktop.Toolbar'
 										,parentPanel: mainPanel

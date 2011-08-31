@@ -31,14 +31,14 @@
 
 			 (loop for bizondemand-js in '("customisations.js" "utils/BaseForm.js" "business/Window.js"
 																		 "party/Form.js" "party/Window.js" "products/Products.js" "products/Goods.js"
-																		 "products/Services.js" "desktop/Toolbar.js" "desktop/MainPanel.js" 
+																		 "products/Services.js" "products/ProductForm.js" "products/ProductGrid.js" "desktop/Toolbar.js" "desktop/MainPanel.js" 
 																		 "Viewport.js")
 					do (htm
 							(:script :src( conc "/js/bizondemand/" bizondemand-js)
 											 :type "text/javascript")))
 			 (:title "Business On Demand"))
 			(:script :type "text/javascript"
-							 (str (ps
-											(*Ext.on-ready( lambda()
-																			(new (*biz-on-demand.-viewport)))))))
+							 (str (ps (*Ext.on-ready( lambda() 
+																				(let ((viewport	(new (*biz-on-demand.-viewport))))
+																					(viewport.show )))))))
 			(:body ,@body))))

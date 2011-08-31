@@ -11,20 +11,20 @@
 
 (defpackage product
 	(:use :cl :postmodern :s-sql :party)
-	(:export create-good list-products))
+	(:export save-product list-products))
 
 (defpackage business
 	(:use :cl :party :postmodern :s-sql)
 	(:export find-business))
 
 (defpackage web-templates
-	(:use :cl :cl-who :hunchentoot :parenscript :json)
+	(:use :cl :cl-who :parenscript :hunchentoot )
 	(:export with-html))
 
 (defpackage web-utils
-	(:use :cl :cl-who :hunchentoot :parenscript :json)
+	(:use :cl :cl-who :hunchentoot )
 	(:export json-encode-list-of-plists 
 					 for-list-of-plists-convert-all-simple-dates-to-y-m-d))
 
 (defpackage web
-	(:use :cl :asdf :cl-who :hunchentoot :parenscript :json :business :product :web-templates))
+	(:use :cl :asdf :cl-who :hunchentoot :business :product :web-templates))
