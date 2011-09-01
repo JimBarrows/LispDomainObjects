@@ -35,6 +35,6 @@
 
 (push( create-folder-dispatcher-and-handler "/js/" "../javascript/") *dispatch-table*)
 
-(party::connect-to-database)
+(database:connect-to-database)
 (defvar *ht-server* (start (make-instance 'acceptor :port 8080)))
 

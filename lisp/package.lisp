@@ -2,6 +2,10 @@
 
 (in-package :cl-user)
 
+(defpackage database
+	(:use :cl :postmodern)
+	(:export connect-to-database))
+
 (defpackage utils
 	(:use :cl)
 	(:export plist-keys))
@@ -27,4 +31,4 @@
 					 for-list-of-plists-convert-all-simple-dates-to-y-m-d))
 
 (defpackage web
-	(:use :cl :asdf :cl-who :hunchentoot :business :product :web-templates))
+	(:use :cl :asdf :database :cl-who :hunchentoot :business :product :web-templates))

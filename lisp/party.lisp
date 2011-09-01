@@ -1,14 +1,21 @@
-;;;; bizondemand.lisp
+;;;; party.lisp
 
 (in-package :party)
-
-(defun connect-to-database ()
-	"Connect to database"
-	(connect-toplevel "jimbarrows" "jimbarrows" "jimbarrows" "localhost"))
 
 (defun roles-list ()
 	"Retrieve a list of the roles in the roles table"
 	(query (:select 'id 'description :from 'roles)))
+
+(defun children-of-role( role-id)
+	"returns the children of a role"
+	(query (concatenate 'string "with recursive role_children(id, description, parent) as "
+											"( select id, description, parent "
+											"from roles where id=$1 "
+											"union all select r.id, r.description, r.parent "
+											"from role_children rc, roles r "
+											"where r.parent = rc.id) "
+											"select id, description, parent from role_children;") role-id))
+
 
 (defun relationships-list()
 	"Retrieve a list of relationships from the relationships table."
