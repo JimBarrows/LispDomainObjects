@@ -1,6 +1,7 @@
 ;;; Main dispatch 
 (in-package :web)
 
+(setf cl-who::*html-mode* :HTML5)
 (setf *js-string-delimiter* #\")
 (setf hunchentoot::*show-lisp-errors-p* t)
 (setf *catch-errors-p* t)
@@ -35,6 +36,6 @@
 
 (push( create-folder-dispatcher-and-handler "/js/" "../javascript/") *dispatch-table*)
 
-(database:connect-to-database)
-(defvar *ht-server* (start (make-instance 'acceptor :port 8080)))
+(connect-to-database)
 
+(defvar *ht-server* (start (make-instance 'acceptor :port 8080)))
