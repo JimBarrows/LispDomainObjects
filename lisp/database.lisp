@@ -1,5 +1,5 @@
 ;;database.lisp
-(in-package database)
+(in-package database-utils)
 
 (defun connect-to-database ()
 	"Create connection to database"
