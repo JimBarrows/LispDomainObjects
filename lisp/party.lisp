@@ -14,7 +14,7 @@
 											"union all select r.id, r.description, r.parent "
 											"from role_children rc, roles r "
 											"where r.parent = rc.id) "
-											"select id, description, parent from role_children;") role-id))
+											"select id, description, parent from role_children where id <> $1 order by parent, description, id") role-id :alists))
 
 
 (defun relationships-list()
