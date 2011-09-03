@@ -2,7 +2,7 @@
 
 (in-package :cl-user)
 
-(defpackage database
+(defpackage database-utils
 	(:use :cl :postmodern)
 	(:export connect-to-database))
 
@@ -26,9 +26,9 @@
 	(:export with-html))
 
 (defpackage web-utils
-	(:use :cl :cl-who :hunchentoot )
+	(:use :cl :cl-who :hunchentoot :simple-date )
 	(:export json-encode-list-of-plists 
 					 for-list-of-plists-convert-all-simple-dates-to-y-m-d))
 
 (defpackage web
-	(:use :cl :asdf :database :cl-who :hunchentoot :business :product :web-templates))
+	(:use :cl :asdf :cl-who :hunchentoot :database-utils :business :product :web-templates))

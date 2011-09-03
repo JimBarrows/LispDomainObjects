@@ -1,7 +1,16 @@
 ;;This is where all templates for html views are located.
 
-;;; Main dispatch 
 (in-package :web-templates)
+
+(defpsmacro $ (selector &body chains)
+  `(chain (j-query ,selector)
+      ,@chains))
+
+(defpsmacro \ (&body body) `(lambda () ,@body))
+
+(defpsmacro doc-ready (&body body)
+  `($ document
+      (ready (\ ,@body))))
 
 (defmacro with-html (&body body)
 	"Wraps the body provided in an html template"
@@ -10,35 +19,26 @@
 			 (*standard-output* nil :prologue t :indent t) 
 		 (:html
 			(:head 
-
-			 (loop for extjs-css-file in '("reset-min.css" "ext-all.css")
-					do (htm
-							(:link :href (conc "/js/extjs/resources/css/" extjs-css-file) 
-										 :type "text/css"
-										 :rel "stylesheet")))
-
-			 (loop for core-extjs-js in '("adapter/ext/ext-base-debug.js" "ext-all-debug.js")
-					do ( htm
-							 (:script :src (conc "/js/extjs/" core-extjs-js) 
-												:type "text/javascript")))
-			 
-			 (loop for grid-extjs in '("Filter.js" "GridFilters.js" "BooleanFilter.js" "DateFilter.js" 
-																 "ListFilter.js" "ListMenu.js" "NumericFilter.js" "RangeMenu.js" 
-																 "StringFilter.js")
-					do (htm
-							(:script :src (conc "/js/extjs/ux/gridfilters/" grid-extjs)
-											 :type "text/javascript")))
-
-			 (loop for bizondemand-js in '("customisations.js" "utils/BaseForm.js" "business/Window.js"
-																		 "party/Form.js" "party/Window.js" "products/Products.js" "products/Goods.js"
-																		 "products/Services.js" "products/ProductForm.js" "products/ProductGrid.js" "desktop/Toolbar.js" "desktop/MainPanel.js" 
-																		 "Viewport.js")
-					do (htm
-							(:script :src( conc "/js/bizondemand/" bizondemand-js)
-											 :type "text/javascript")))
-			 (:title "Business On Demand"))
-			(:script :type "text/javascript"
-							 (str (ps (*Ext.on-ready( lambda() 
-																				(let ((viewport	(new (*biz-on-demand.-viewport))))
-																					(viewport.show )))))))
-			(:body ,@body))))
+			 (:link :href "http://twitter.github.com/bootstrap/assets/css/bootstrap-1.1.1.min.css" :rel "stylesheet" :type "text/css")
+			 (:script :src "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" :type "text/javascript")
+			 (:script :src "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" :type "text/javascript")
+			 (:title "Business On Demand")
+			 (:script :type "text/javascript"
+							 (str 
+									(ps (chain (jquery document) ( ready (lambda () 
+												(progn 
+																(chain (jquery "body") (bind "click" (lambda (e)( 
+																																								 (chain (jquery "a.menu") (parent "li") (remove-class "open"))))))
+																(chain (jquery "a.menu") (click (lambda (e) (
+																																						 progn 
+																																							(defvar li ( chain (jquery this) (parent "li") (toggle-class "open")))
+																																							false)))))))))
+									)))
+			(:body :style "padding-top: 40px"
+						 (:div :class "topbar-wrapper" :style "z-index: 5"
+									 (:div :class "topbar" 
+												(:div :class "fill"
+															(:div :class "container"
+																		(:h3
+																		 (:a :href "#" "Business On Demand"))
+																		)))) ,@body))))
