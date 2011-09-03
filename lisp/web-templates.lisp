@@ -25,13 +25,13 @@
 			 (:title "Business On Demand")
 			 (:script :type "text/javascript"
 							 (str 
-									(ps (chain (jquery document) ( ready (lambda () 
+									(ps (chain (j-query document) ( ready (lambda () 
 												(progn 
-																(chain (jquery "body") (bind "click" (lambda (e)( 
-																																								 (chain (jquery "a.menu") (parent "li") (remove-class "open"))))))
-																(chain (jquery "a.menu") (click (lambda (e) (
+																(chain (j-query "body") (bind "click" (lambda (e)( 
+																																								 (chain (j-query "a.menu") (parent "li") (remove-class "open"))))))
+																(chain (j-query "a.menu") (click (lambda (e) (
 																																						 progn 
-																																							(defvar li ( chain (jquery this) (parent "li") (toggle-class "open")))
+																																							(defvar $li ( chain (j-query this) (parent "li") (toggle-class "open")))
 																																							false)))))))))
 									)))
 			(:body :style "padding-top: 40px"
@@ -41,4 +41,14 @@
 															(:div :class "container"
 																		(:h3
 																		 (:a :href "#" "Business On Demand"))
+																		(:ul :class "nav"
+																				 (:li :class "menu"
+																							(:a :href "#" :class "menu" "CRM")
+																							(:ul :class "menu-dropdown"
+																									 (:li
+																										(:a :href "#" "Customers"))
+																									 (:li
+																										(:a :href "#" "Cases"))
+																									 (:li
+																										(:a :href "#" "Conversations")))))
 																		)))) ,@body))))
