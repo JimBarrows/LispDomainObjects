@@ -30,5 +30,6 @@
 	(:export json-encode-list-of-plists 
 					 for-list-of-plists-convert-all-simple-dates-to-y-m-d))
 
-(defpackage web
-	(:use :cl :asdf :cl-who :hunchentoot :database-utils :business :product :web-templates))
+(defpackage dispatch
+	(:use :cl :cl-who :hunchentoot :database-utils :business :product 
+				:web-templates))

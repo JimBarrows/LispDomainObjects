@@ -1,8 +1,8 @@
 ;;; Main dispatch 
-(in-package :web)
+(in-package :dispatch)
 
 (setf cl-who::*html-mode* :HTML5)
-(setf *js-string-delimiter* #\")
+(setf parenscript::*js-string-delimiter* #\")
 (setf hunchentoot::*show-lisp-errors-p* t)
 (setf *catch-errors-p* t)
 

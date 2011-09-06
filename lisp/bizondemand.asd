@@ -10,7 +10,7 @@
 							 #:cl-json)
   :components ((:file "package")
 							 (:file "utils")
-							 (:file "database")
+							 (:file "database-utils")
                (:file "party")
 							 (:file "business")
 							 (:file "product")
