@@ -2,16 +2,6 @@
 
 (in-package :web-templates)
 
-(defpsmacro $ (selector &body chains)
-  `(chain (j-query ,selector)
-      ,@chains))
-
-(defpsmacro \ (&body body) `(lambda () ,@body))
-
-(defpsmacro doc-ready (&body body)
-  `($ document
-      (ready (\ ,@body))))
-
 (defmacro with-html (&body body)
 	"Wraps the body provided in an html template"
 	
@@ -25,15 +15,15 @@
 			 (:title "Business On Demand")
 			 (:script :type "text/javascript"
 							 (str 
-									(ps (chain (j-query document) ( ready (lambda () 
+									(ps (doc-ready
 												(progn 
-																(chain (j-query "body") (bind "click" (lambda (e)( 
-																																								 (chain (j-query "a.menu") (parent "li") (remove-class "open"))))))
-																(chain (j-query "a.menu") (click (lambda (e) (
-																																						 progn 
-																																							(defvar $li ( chain (j-query this) (parent "li") (toggle-class "open")))
-																																							false)))))))))
-									)))
+																(chain ($ "body") (bind "click" (lambda (e)( 
+																																			 				 (chain ($ "a.menu") (parent "li") (remove-class "open"))))))
+																(chain ($ "a.menu") (click (lambda (e) (
+																																				progn 
+																																				 (defvar $li ( chain ($ this) (parent "li") (toggle-class "open"))
+																																				 false)))))))
+									))))
 			(:body :style "padding-top: 40px"
 						 (:div :class "topbar-wrapper" :style "z-index: 5"
 									 (:div :class "topbar" 

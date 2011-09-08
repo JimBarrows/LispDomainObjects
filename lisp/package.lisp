@@ -21,8 +21,12 @@
 	(:use :cl :party :postmodern :s-sql)
 	(:export find-business))
 
+(defpackage jquery-utils
+	(:use :cl :parenscript)
+	(:export $ doc-ready))
+
 (defpackage web-templates
-	(:use :cl :cl-who :parenscript :hunchentoot )
+	(:use :cl :cl-who :parenscript :hunchentoot :jquery-utils )
 	(:export with-html))
 
 (defpackage web-utils

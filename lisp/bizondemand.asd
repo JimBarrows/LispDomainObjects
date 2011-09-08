@@ -14,6 +14,7 @@
                (:file "party")
 							 (:file "business")
 							 (:file "product")
+							 (:file "jquery-utils")
 							 (:file "web-templates")
 							 (:file "web-utils")
 							 (:file "dispatch")))
