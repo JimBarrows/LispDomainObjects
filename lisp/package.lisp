@@ -25,6 +25,9 @@
 	(:use :cl :parenscript)
 	(:export $ doc-ready))
 
+(defpackage twitter-bootstrap
+	(:use :cl :cl-who :jquery-utils))
+
 (defpackage web-templates
 	(:use :cl :cl-who :parenscript :hunchentoot :jquery-utils )
 	(:export with-html))

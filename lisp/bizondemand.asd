@@ -15,6 +15,7 @@
 							 (:file "business")
 							 (:file "product")
 							 (:file "jquery-utils")
+							 (:file "twitter-bootstrap")
 							 (:file "web-templates")
 							 (:file "web-utils")
 							 (:file "dispatch")))

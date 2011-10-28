@@ -2,6 +2,9 @@
 
 (in-package :web-templates)
 
+(deffun add-css (css-list)
+	(htm (:link :href (first css-list) :rel "stylesheet" :type "text/css") (add-css (rest css-list))))
+
 (defmacro with-html (&body body)
 	"Wraps the body provided in an html template"
 	
