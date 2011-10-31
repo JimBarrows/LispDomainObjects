@@ -11,7 +11,7 @@
   :components ((:file "package")
 							 (:file "utils")
 							 (:file "database-utils")
-               (:file "party")
+               (:file "people-and-organizations")
 							 (:file "business")
 							 (:file "product")
 							 (:file "jquery-utils")

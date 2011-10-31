@@ -10,7 +10,7 @@
 	(:use :cl)
 	(:export plist-keys))
 
-(defpackage party
+(defpackage people-and-organizations
   (:use :cl :postmodern ))
 
 (defpackage product
