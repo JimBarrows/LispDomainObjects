@@ -14,7 +14,7 @@
 			( ( id :type serial :primary-key t)
 				( version :type integer )
 				( name :type string )
-				( parent :type bigint))))
+				( parent :type (or db-null bigint)))))
 	( execute  
 		( :create-table party  
 			( ( id :type serial :primary-key t)
