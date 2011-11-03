@@ -8,6 +8,28 @@
 	(create-tables)
 	(load-data))
 
+(defun create-organization (name type-name)
+	"Create a party of type organization, with the given name"
+	(let 
+		( ( party-id (execute ( :insert-into 'parties :set 
+													'type (find-organization-type-id type-name)
+													'version 0
+														:returning 'id) :single)))
+		( execute ( :insert-into 'party_names :set
+													'name_type_id (find-name-type-id "Name")
+													'party_id party-id
+													'name name))))
+
+(defun find-organization-type-id (type-name)
+	"Find the id for the provided type-name, or raise an error if it doesn't exist"
+	(query
+		( :select 'id :from 'party_types :where (:= 'name '$1)) type-name :single))
+
+(defun find-name-type-id (name-type)
+	"Find the id for the provided name-tyhpe, or raise an error if it doesn't exist"
+	(query
+		( :select 'id :from 'name_types :where (:= 'name '$1)) name-type :single))
+
 (defun roles-list ()
 	"Retrieve a list of the roles in the roles table"
 	(query (:select 'id 'description :from 'roles)))
@@ -27,11 +49,6 @@
 	"Retrieve a list of relationships from the relationships table."
 	(query(:select 'id 'description :from 'relationships)))
 
-(defun create-organization (name)
-	"Create a party of type organization, with the given name"
-	(query ( :insert-into 'parties 
-													:set 'type "organization" 'name name 
-													:returning 'id) :single))
 
 (defun update-organization (id name)
 	"Update the organization name."

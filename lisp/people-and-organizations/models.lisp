@@ -21,18 +21,25 @@
 				( name :type string )
 				( parent :type (or db-null bigint)))))
 	( execute  
-		( :create-table party  
+		( :create-table parties  
 			( ( id :type serial :primary-key t)
 				( version :type integer )
-				( type :type string )))))
+				( type :type bigint ))))
+	( execute
+		( :create-table party_names
+			( ( name_type_id :type bigint :references (name_types :cascade :cascade))
+				( party_id :type bigint :references (parties :cascade :cascade))
+				( name :type string)))))
 
 (defun drop-tables()
 	"Drop all tables"
 	( execute
-		( :drop-table :if-exists 'party  ))
+		( :drop-table :if-exists 'party_names  ))
+	( execute
+		( :drop-table :if-exists 'name_types  ))
 	( execute
 		( :drop-table :if-exists 'party_types  ))
 	( execute
-		( :drop-table :if-exists 'name_types  )))
+		( :drop-table :if-exists 'parties  )))
 
 		
