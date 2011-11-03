@@ -2,6 +2,11 @@
 
 (in-package :people-and-organizations)
 
+(defun build-database () 
+	(drop-tables)
+	(create-tables)
+	(load-data))
+
 (defun create-tables ()
 	"Create all the tables needed for the people and organizations section"
 	( execute 

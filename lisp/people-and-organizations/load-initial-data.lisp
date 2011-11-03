@@ -1,5 +1,9 @@
 (in-package :people-and-organizations)
 
+(defun load-data () 
+	(insert-name-type-records)
+	(insert-party-type-records))
+
 (defun insert-name-type-records () 
 	"Initial data load for name types"
 	(execute ( :insert-into 'name_types :set 'name "First" 'version 0))

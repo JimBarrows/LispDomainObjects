@@ -11,7 +11,8 @@
 	(:export plist-keys))
 
 (defpackage people-and-organizations
-  (:use :cl :postmodern ))
+  (:use :cl :postmodern )
+  (:export build-database))
 
 ;(defpackage product
 ;	(:use :cl :postmodern :s-sql :party)
