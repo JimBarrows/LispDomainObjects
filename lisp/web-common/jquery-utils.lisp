@@ -1,6 +1,6 @@
 ;;These are helpful functions for dealing with jquery
 
-(in-package :jquery-utils)
+(in-package :web-common)
 
 (defpsmacro $ (selector &body chains)
   `(chain (j-query ,selector)

@@ -1,6 +1,6 @@
 ;;Various functions to help with web stuff
 
-(in-package :web-utils)
+(in-package :web-common)
 
 (defun add-plist-to-each-record (record-list)
 	"Take a list: ((:ID 1 :NAME \"first good\" :INTRODUCTION-DATE #<SIMPLE-DATE:DATE 06-04-2011>  :SALES-DISCONTINUATION-DATE :NULL :SUPPORT-DISCONTINUATION-DATE :NULL  :COMMENT :NULL)) and turn it into ((:plist :ID 1 :NAME \"first good\" :INTRODUCTION-DATE #<SIMPLE-DATE:DATE 06-04-2011>  :SALES-DISCONTINUATION-DATE :NULL :SUPPORT-DISCONTINUATION-DATE :NULL  :COMMENT :NULL))"
@@ -25,7 +25,7 @@
 (defun convert-all-to-simple-date (plist keys)
 		(loop while plist do
 			 (multiple-value-bind (key value tail) (get-properties plist keys)
-				 (when (typep value 'simple-date:date) (setf (getf plist key) (web-utils::convert-simple-date-to-y-m-d value)))
+				 (when (typep value 'simple-date:date) (setf (getf plist key) (convert-simple-date-to-y-m-d value)))
 				 (setf plist (cddr tail)))))
 
 (defun convert-plist-all-simple-date-to-y-m-d( plist)
