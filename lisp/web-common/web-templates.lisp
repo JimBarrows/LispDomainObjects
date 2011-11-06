@@ -30,8 +30,12 @@
 		 (:script :src (first javascript-file-list) :type "text/javascript") 
 		 (javascript-links (rest javascript-file-list)))))
 
-;(defun css-links (css-list)
-;	(htm (:link :href (first css-list) :rel "stylesheet" :type "text/css") (css-links (rest css-list))))
+(defun css-links (css-list)
+"Cretae css link tags from the list passed in."
+( unless (null css-list)
+	(cl-who:with-html-output (*standard-output*)
+		(:script :src (first css-list) :rel "stylesheet" :type "text/css")
+		(css-links (rest css-list)))))
 
 (defmacro with-html (&body body)
 	"Wraps the body provided in an html template"
@@ -40,11 +44,8 @@
 			 (*standard-output* nil :prologue t :indent t) 
 		 (:html
 			(:head 
-			 (:link :href "http://twitter.github.com/bootstrap/assets/css/bootstrap-1.1.1.min.css" :rel "stylesheet" :type "text/css")
-;			 (css-links *css-files*)
+			 (css-links *css-files*)
 			 (javascript-links *javascript-files*)
-;			 (:script :src "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" :type "text/javascript")
-;			 (:script :src "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js" :type "text/javascript")
 			 (:title "Business On Demand")
 ;			 (:script :type "text/javascript"
 ;							 (str 
