@@ -2,6 +2,9 @@
 
 (in-package :web-common)
 
+(setf *PS-PRINT-PRETTY* t)
+(setf *INDENT-NUM-SPACES* 2)
+
 (defparameter *javascript-files* '("https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js")
 "List of javascript files to include in the template")
 
@@ -34,7 +37,7 @@
 "Cretae css link tags from the list passed in."
 ( unless (null css-list)
 	(cl-who:with-html-output (*standard-output*)
-		(:script :src (first css-list) :rel "stylesheet" :type "text/css")
+		(:link :href (first css-list) :rel "stylesheet" :type "text/css")
 		(css-links (rest css-list)))))
 
 (defmacro with-html (&body body)
@@ -47,6 +50,10 @@
 			 (css-links *css-files*)
 			 (javascript-links *javascript-files*)
 			 (:title "Business On Demand")
+			 (:script :type "text/javascript"
+								(str (ps ( $ document (ready (lambda () (progn 
+																													(chain ($ "body") (bind "click" (lambda (e) ( chain ($ "a.menu") (parent "li") (remove-class "open")))))
+																													(chain ($ "a.menu") (click (lambda (e) (progn (defvar $li (chain ($ this) (parent "li") (toggle-class "open"))) false)))) false))))))))
 ;			 (:script :type "text/javascript"
 ;							 (str 
 ;									(ps (doc-ready
@@ -57,7 +64,7 @@
 ;																																				progn 
 ;																																				 (defvar $li ( chain ($ this) (parent "li") (toggle-class "open"))
 ;																																				 false)))))))))))
-)
+
 			(:body :style "padding-top: 40px"
 						 (:div :class "topbar-wrapper" :style "z-index: 5"
 									 (:div :class "topbar" 
