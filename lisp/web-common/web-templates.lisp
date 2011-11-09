@@ -14,6 +14,9 @@
 (defparameter *menus* nil
 "List of menus to add to the main toolbar")
 
+(defvar *page-title* "MBMS"
+"The title that goes in the head tags, and the main menu bar")
+
 (defun add-javascript-file (filename)
 "Adds a javascript file to the list of files to be included in the template"
 (append *javascript-files* filename))
@@ -40,6 +43,10 @@
 		(:link :href (first css-list) :rel "stylesheet" :type "text/css")
 		(css-links (rest css-list)))))
 
+(defun title () 
+"prints the *page-title* to standard-out, formatted"
+(format *standard-output* "~a" *page-title*))
+
 (defmacro with-html (&body body)
 	"Wraps the body provided in an html template"
 	
@@ -49,21 +56,11 @@
 			(:head 
 			 (css-links *css-files*)
 			 (javascript-links *javascript-files*)
-			 (:title "Business On Demand")
+			 (:title (title))
 			 (:script :type "text/javascript"
 								(str (ps ( $ document (ready (lambda () (progn 
 																													(chain ($ "body") (bind "click" (lambda (e) ( chain ($ "a.menu") (parent "li") (remove-class "open")))))
 																													(chain ($ "a.menu") (click (lambda (e) (progn (defvar $li (chain ($ this) (parent "li") (toggle-class "open"))) false)))) false))))))))
-;			 (:script :type "text/javascript"
-;							 (str 
-;									(ps (doc-ready
-;												(progn 
-;																(chain ($ "body") (bind "click" (lambda (e)( 
-;																																			 				 (chain ($ "a.menu") (parent "li") (remove-class "open"))))))
-;																(chain ($ "a.menu") (click (lambda (e) (
-;																																				progn 
-;																																				 (defvar $li ( chain ($ this) (parent "li") (toggle-class "open"))
-;																																				 false)))))))))))
 
 			(:body :style "padding-top: 40px"
 						 (:div :class "topbar-wrapper" :style "z-index: 5"
@@ -71,7 +68,7 @@
 												(:div :class "fill"
 															(:div :class "container"
 																		(:h3
-																		 (:a :href "#" "Business On Demand"))
+																		 (:a :href "#" (title)))
 																		(:ul :class "nav"
 																				 (:li :class "menu"
 																							(:a :href "#" :class "menu" "CRM")
