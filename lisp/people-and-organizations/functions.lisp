@@ -8,17 +8,29 @@
 	(create-tables)
 	(load-data))
 
-(defun create-organization (name type-name)
+(defun create-organization (name type-id)
 	"Create a party of type organization, with the given name"
 	(let 
 		( ( party-id (execute ( :insert-into 'parties :set 
-													'type (find-organization-type-id type-name)
+													'type type-id
 													'version 0
 														:returning 'id) :single)))
 		( execute ( :insert-into 'party_names :set
 													'name_type_id (find-name-type-id "Name")
 													'party_id party-id
 													'name name))))
+
+(defun organization-list (organization-id) 
+	"Return a list of organization types"
+	(query (concatenate 'string 
+		"with recursive children(id, name, parent) as "
+			"( select id, name, parent "
+			"from party_types where id = $1 "
+			"union all select p.id, p.name, p.parent "
+			"from children, party_types p "
+			"where p.parent = children.id) "
+			"select id, name, parent from children where id <> $1 "
+			"order by parent, name, id ") organization-id :plists))
 
 (defun find-organization-type-id (type-name)
 	"Find the id for the provided type-name, or raise an error if it doesn't exist"

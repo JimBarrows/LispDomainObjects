@@ -4,6 +4,10 @@
 
 (setf *PS-PRINT-PRETTY* t)
 (setf *INDENT-NUM-SPACES* 2)
+(setf cl-who::*html-mode* :HTML5)
+(setf parenscript::*js-string-delimiter* #\")
+(setf hunchentoot::*show-lisp-errors-p* t)
+(setf *catch-errors-p* t)
 
 (defparameter *javascript-files* '("https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js")
 "List of javascript files to include in the template")
@@ -11,7 +15,7 @@
 (defparameter *css-files* '( "http://twitter.github.com/bootstrap/assets/css/bootstrap-1.1.1.min.css")
 "List of css files to include in the template")
 
-(defparameter *menus* (list (make-menu-entry :name "People and Organizations" :items (list (make-menu-item :name "List" :url "/people-and-organizations"))))
+(defparameter *menus* nil
 "List of menus to add to the main toolbar")
 
 (defvar *page-title* "MBMS"
@@ -19,40 +23,45 @@
 
 (defun add-javascript-file (filename)
 "Adds a javascript file to the list of files to be included in the template"
-(append *javascript-files* filename))
+(setf *javascript-files* (append *javascript-files* filename)))
 
 (defun add-css-file (filename)
 "Adds a css file to the list of files to be included in the template"
-(append *css-files* filename))
+(setf *css-files* (append *css-files* filename)))
+
+(defun add-menu( new-menu)
+"Adds a menu definition to the list of menus to be included in the template"
+(setf *menus* 
+			(append *menus* new-menu)))
 
 (defstruct menu-entry
 	name
 	items)
 
-(defstruct menu-item
+(defstruct sub-menu-entry
 	name
 	url)
 
-(defun add-menu-item ( menu-item-list)
+(defun sub-menu ( menu-item-list)
 "Add a menu item to the menu"
 (unless ( null menu-item-list)
 	(let ((cur-menu-item (first menu-item-list)))
 		(cl-who:with-html-output (*standard-output*)
 			(:li
-			 (:a :href (menu-item-url cur-menu-item)
+			 (:a :href (sub-menu-entry-url cur-menu-item)
 					 (format *standard-output* 
-									 (menu-item-name cur-menu-item))))))
-	(add-menu-item (rest menu-item-list))))
+									 (sub-menu-entry-name cur-menu-item))))))
+	(sub-menu (rest menu-item-list))))
 
-(defun add-menu ( menu-entry)
+(defun menu ( menu-entry)
 "Adds menus to the toolbar."
 (unless (null menu-entry)
 		(let ((cur-menu (first menu-entry)))
 				 (cl-who:with-html-output (*standard-output*)
 					 (:a :href "#" :class "menu"  (format *standard-output* (menu-entry-name cur-menu)))
 					(:ul :class "menu-dropdown"
-							 (add-menu-item (menu-entry-items cur-menu))))
-		(add-menu (rest menu-entry)))))
+							 (sub-menu (menu-entry-items cur-menu))))
+		(menu (rest menu-entry)))))
 
 (defun javascript-links (javascript-file-list)
 "Create javascript link tags from the list passed in."
@@ -93,7 +102,7 @@
 												(:div :class "fill"
 															(:div :class "container"
 																		(:h3
-																		 (:a :href "#" (title)))
+																		 (:a :href "/" (title)))
 																		(:ul :class "nav"
 																				 (:li :class "menu"
-																							(add-menu *menus*))))))) ,@body))))
+																							(menu *menus*))))))) ,@body))))

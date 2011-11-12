@@ -10,13 +10,13 @@
 	(:use :cl)
 	(:export plist-keys))
 
+(defpackage web-common
+	(:use :cl :parenscript :cl-who :hunchentoot :simple-date :database-utils)
+	(:export add-css-file add-javascript-file add-menu with-html menu-entry menu-item))
+
 (defpackage people-and-organizations
   (:use :cl :postmodern )
   (:export build-database))
-
-(defpackage web-common
-	(:use :cl :parenscript :cl-who :hunchentoot :simple-date :database-utils)
-	(:export add-css-file add-javascript-file add-menu with-html))
 
 ;(defpackage product
 ;	(:use :cl :postmodern :s-sql :party)

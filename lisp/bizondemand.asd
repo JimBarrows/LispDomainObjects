@@ -18,5 +18,6 @@
 							 (:file "web-common/dispatch")
                (:file "people-and-organizations/functions")
                (:file "people-and-organizations/models")
+							 (:file "people-and-organizations/url-dispatch")
                (:file "people-and-organizations/load-initial-data")))
 
