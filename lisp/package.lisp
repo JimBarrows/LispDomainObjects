@@ -16,7 +16,7 @@
 
 (defpackage web-common
 	(:use :cl :parenscript :cl-who :hunchentoot :simple-date :database-utils)
-	(:export add-css-file add-javascript-file add-javascript add-menu with-html))
+	(:export add-css-file add-javascript-file add-menu with-html))
 
 ;(defpackage product
 ;	(:use :cl :postmodern :s-sql :party)

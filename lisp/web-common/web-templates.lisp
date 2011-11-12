@@ -11,7 +11,7 @@
 (defparameter *css-files* '( "http://twitter.github.com/bootstrap/assets/css/bootstrap-1.1.1.min.css")
 "List of css files to include in the template")
 
-(defparameter *menus* nil
+(defparameter *menus* (list (make-menu-entry :name "People and Organizations" :items (list (make-menu-item :name "List" :url "/people-and-organizations"))))
 "List of menus to add to the main toolbar")
 
 (defvar *page-title* "MBMS"
@@ -25,9 +25,34 @@
 "Adds a css file to the list of files to be included in the template"
 (append *css-files* filename))
 
-(defun add-menu (menu)
-"Adds a menu to the main toolbar"
-(append *menus* menu))
+(defstruct menu-entry
+	name
+	items)
+
+(defstruct menu-item
+	name
+	url)
+
+(defun add-menu-item ( menu-item-list)
+"Add a menu item to the menu"
+(unless ( null menu-item-list)
+	(let ((cur-menu-item (first menu-item-list)))
+		(cl-who:with-html-output (*standard-output*)
+			(:li
+			 (:a :href (menu-item-url cur-menu-item)
+					 (format *standard-output* 
+									 (menu-item-name cur-menu-item))))))
+	(add-menu-item (rest menu-item-list))))
+
+(defun add-menu ( menu-entry)
+"Adds menus to the toolbar."
+(unless (null menu-entry)
+		(let ((cur-menu (first menu-entry)))
+				 (cl-who:with-html-output (*standard-output*)
+					 (:a :href "#" :class "menu"  (format *standard-output* (menu-entry-name cur-menu)))
+					(:ul :class "menu-dropdown"
+							 (add-menu-item (menu-entry-items cur-menu))))
+		(add-menu (rest menu-entry)))))
 
 (defun javascript-links (javascript-file-list)
 "Create javascript link tags from the list passed in."
@@ -71,12 +96,4 @@
 																		 (:a :href "#" (title)))
 																		(:ul :class "nav"
 																				 (:li :class "menu"
-																							(:a :href "#" :class "menu" "CRM")
-																							(:ul :class "menu-dropdown"
-																									 (:li
-																										(:a :href "#" "Customers"))
-																									 (:li
-																										(:a :href "#" "Cases"))
-																									 (:li
-																										(:a :href "#" "Conversations")))))
-																		)))) ,@body))))
+																							(add-menu *menus*))))))) ,@body))))
