@@ -15,7 +15,7 @@
 (defparameter *css-files* '( "http://twitter.github.com/bootstrap/assets/css/bootstrap-1.1.1.min.css")
 "List of css files to include in the template")
 
-(defparameter *menus* nil
+(defvar *menus* nil
 "List of menus to add to the main toolbar")
 
 (defvar *page-title* "MBMS"
@@ -105,4 +105,5 @@
 																		 (:a :href "/" (title)))
 																		(:ul :class "nav"
 																				 (:li :class "menu"
-																							(menu *menus*))))))) ,@body))))
+																							(menu *menus*)))))))
+						 (:div :class "container" ,@body)))))

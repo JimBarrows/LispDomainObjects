@@ -10,5 +10,5 @@
 	(web-common::with-html (:a :href "people-and-organizations/add-organization" "Add Organization") (:p "A list of people and organizations go here")))
 
 (hunchentoot:define-easy-handler (add-organization :uri "/people-and-organizations/add-organization" :default-request-type :get) ()
-	(web-common::with-html (:p "Add an organization form goes here")))
+	(add-organization-template))
 
