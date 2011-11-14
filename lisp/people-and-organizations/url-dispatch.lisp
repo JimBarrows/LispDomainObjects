@@ -1,7 +1,6 @@
 (in-package :people-and-organizations)
 
-
-(web-common::add-menu  (list (
+(web-common::add-menus  (list (
 									web-common::make-menu-entry :name "People and Organizations" 
 																	:items (list 
 																					(web-common::make-sub-menu-entry :name "List" :url "/people-and-organizations")))))
