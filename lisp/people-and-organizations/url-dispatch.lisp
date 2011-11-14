@@ -12,3 +12,5 @@
 (hunchentoot:define-easy-handler (add-organization :uri "/people-and-organizations/add-organization" :default-request-type :get) ()
 	(add-organization-template))
 
+(hunchentoot:define-easy-handler (save-organization :uri "/people-and-organizations/save-organization" :default-request-type :post) ()
+	(save-organization))

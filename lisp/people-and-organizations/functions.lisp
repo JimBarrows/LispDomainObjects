@@ -20,8 +20,12 @@
 													'party_id party-id
 													'name name))))
 
-(defun organization-list (organization-id) 
-	"Return a list of organization types"
+(defun organization-type-list ()
+	"Return a list of types that inherit from the organization type"
+	(party-type-list (find-party-type-id "Organization")))
+
+(defun party-type-list (party-type-id) 
+	"Return a list of party types for an organization-id"
 	(query (concatenate 'string 
 		"with recursive children(id, name, parent) as "
 			"( select id, name, parent "
@@ -30,15 +34,15 @@
 			"from children, party_types p "
 			"where p.parent = children.id) "
 			"select id, name, parent from children where id <> $1 "
-			"order by parent, name, id ") organization-id :plists))
+			"order by name, parent, id ") party-type-id :plists))
 
-(defun find-organization-type-id (type-name)
+(defun find-party-type-id (type-name)
 	"Find the id for the provided type-name, or raise an error if it doesn't exist"
 	(query
 		( :select 'id :from 'party_types :where (:= 'name '$1)) type-name :single))
 
 (defun find-name-type-id (name-type)
-	"Find the id for the provided name-tyhpe, or raise an error if it doesn't exist"
+	"Find the id for the provided name-type, or raise an error if it doesn't exist"
 	(query
 		( :select 'id :from 'name_types :where (:= 'name '$1)) name-type :single))
 
