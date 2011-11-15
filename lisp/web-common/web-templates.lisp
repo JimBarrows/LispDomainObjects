@@ -31,15 +31,9 @@
 
 (defun add-menus( new-menu-list)
 "Adds a menu definition to the list of menus to be included in the template"
-;( print new-menu-list)
 (dolist (menu new-menu-list)
 	(pushnew menu *menus* :test (lambda (left right) 
-;																(print "hello" left)
 																( equal (menu-entry-name left) (menu-entry-name right))))))
-;					 :key (lambda( k) (menu-entry-name k)))))
-
-;(setf *menus* 
-;			(append *menus
 
 (defstruct menu-entry
 	name
