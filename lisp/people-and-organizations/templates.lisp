@@ -4,14 +4,15 @@
 "Creates a list of people and organizations"
 	(web-common::with-html (:a :href *add-organization-url* "Add Organization") (:p "A list of people and organizations go here")))
 
-(defun organization-form ()
-"Creates the basic template to add an organization"
+(defun organization-form ( &optional name-error-message)
+"Creates the basic template to add an organization. name-error-message is optional."
 (web-common::with-html 
 	(:form :action *save-organization-url* :method "post"
-				 (:div :class "clearfix"
+				 (:div :class (if (null name-error-message) "clearfix" "clearfix error")
 							 (:label :for "name" "Organization Name")
 							 (:div :class "input"
-										 (:input :type "text" :name "name")))
+										 (:input :type "text" :name "name"))
+							(:span :class "help-inline" (cl-who:fmt "~a" name-error-message)))
 				 (:div :class "clearfix"
 							 (:label :for "type-id" "Type")
 							 (:div :class "input"
@@ -26,7 +27,7 @@
 "Saves an organization to the database, sets a message and returns to the list"
 (let (( name (string-trim " " name)))
 	(if (equal "" name) 
-			(organization-form)
+			(organization-form "Name is required")
 			(progn
 				(create-organization name type-id)
 				(hunchentoot:redirect *people-and-organizations-url*)))))
