@@ -2,7 +2,14 @@
 
 (defun people-and-organizations-list ()
 "Creates a list of people and organizations"
-	(web-common::with-html (:a :href *add-organization-url* "Add Organization") (:p "A list of people and organizations go here")))
+	(web-common::with-html 
+		(:a :href *add-organization-url* "Add Organization") 
+		(dolist (current-row  (people-and-organizations-query))
+			(cl-who:htm 
+			 (:div :class "row"
+						 (:div :class "span-one-third"
+									 (:span :class "name" 
+													(cl-who:str (getf current-row :name)))))))))
 
 (defun organization-form ( &optional name-error-message)
 "Creates the basic template to add an organization. name-error-message is optional."
