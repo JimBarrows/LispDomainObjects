@@ -5,11 +5,16 @@
 																	:items (list 
 																					(web-common::make-sub-menu-entry :name "List" :url "/people-and-organizations")))))
 
-(hunchentoot:define-easy-handler (list-people-and-organizations :uri "/people-and-organizations" :default-request-type :get) ()
-	(web-common::with-html (:a :href "people-and-organizations/add-organization" "Add Organization") (:p "A list of people and organizations go here")))
+(defparameter *people-and-organizations-url* "/people-and-organizations")
+(defparameter *organization-url* (concatenate 'string *people-and-organizations-url* "/organization"))
+(defparameter *add-organization-url* (concatenate 'string *organization-url* "/add"))
+(defparameter *save-organization-url* (concatenate 'string *organization-url* "/save"))
 
-(hunchentoot:define-easy-handler (add-organization :uri "/people-and-organizations/add-organization" :default-request-type :get) ()
-	(add-organization-template))
+(hunchentoot:define-easy-handler (list-people-and-organizations :uri *people-and-organizations-url* :default-request-type :get) ()
+	(people-and-organizations-list))
 
-(hunchentoot:define-easy-handler (save-organization :uri "/people-and-organizations/save-organization" :default-request-type :post) ()
-	(save-organization))
+(hunchentoot:define-easy-handler (add-organization :uri *add-organization-url* :default-request-type :get) ()
+	(organization-form))
+
+(hunchentoot:define-easy-handler (save-organization-handler :uri *save-organization-url* :default-request-type :post) (name type-id)
+	(save-organization name type-id))

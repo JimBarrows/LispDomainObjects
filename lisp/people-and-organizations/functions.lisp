@@ -10,15 +10,16 @@
 
 (defun create-organization (name type-id)
 	"Create a party of type organization, with the given name"
-	(let 
-		( ( party-id (execute ( :insert-into 'parties :set 
-													'type type-id
-													'version 0
-														:returning 'id) :single)))
-		( execute ( :insert-into 'party_names :set
-													'name_type_id (find-name-type-id "Name")
-													'party_id party-id
-													'name name))))
+	(with-transaction ()
+			(let 
+					( ( party-id (query ( :insert-into 'parties :set 
+																						 'type type-id
+																						 'version 0
+																						 :returning 'id) :single)))
+				( execute ( :insert-into 'party_names :set
+																 'name_type_id (find-name-type-id "Name")
+																 'party_id party-id
+																 'name name)))))
 
 (defun organization-type-list ()
 	"Return a list of types that inherit from the organization type"
