@@ -8,6 +8,19 @@
 	(create-tables)
 	(load-data))
 
+(defun people-and-organizations-query ()
+"Create a list of people and organizations"
+(query 
+ ( :order-by 
+	 (:select 'party_names.name 'party_types.name
+						:from 'parties 'party_names 'party_types
+						:where (:and 
+										(:= 'parties.id 'party_names.party_id)
+										(:= 'parties.type 'party_types.id)))
+						'party_names.name)
+ :plists))
+
+
 (defun create-organization (name type-id)
 	"Create a party of type organization, with the given name"
 	(with-transaction ()
