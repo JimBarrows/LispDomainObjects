@@ -3,13 +3,34 @@
 (defun people-and-organizations-list ()
 "Creates a list of people and organizations"
 	(web-common::with-html 
-		(:a :href *add-organization-url* "Add Organization") 
-		(dolist (current-row  (people-and-organizations-query))
-			(cl-who:htm 
-			 (:div :class "row"
-						 (:div :class "span-one-third"
-									 (:span :class "name" 
-													(cl-who:str (getf current-row :name)))))))))
+		(:section :id "people-and-organization-list" 
+							(:a :href *add-organization-url* "Add Organization")
+							(let ((result-list (people-and-organizations-query))
+										(columns 3))
+								(loop for i from 0 to (list-length result-list) by 3 do
+											 (people-and-organizations-row (list (nth i result-list) 
+																													 (nth (+ 1 i) result-list)
+																													 (nth (+ 2 i) result-list))))))))
+
+(defun people-and-organizations-row( row-list)
+"Writes one row of the list"
+(cl-who:with-html-output (*standard-output* nil :indent t)
+	(:div :class "row"
+				(dolist (current-cell row-list)
+					(people-and-organizations-cell current-cell)))))
+
+(defun people-and-organizations-cell ( party)
+"Writes one cell of the entire list"
+(cl-who:with-html-output (*standard-output* nil :indent t)
+	(:div :class "span-one-third"
+				(vcard party))))
+												 
+(defun vcard (party)
+"Generates an html version of the vcard format"
+(cl-who:with-html-output (*standard-output* nil :indent t)
+	(:section :class "vcard"
+						(:span :class "org" 
+									 (cl-who:str (getf party :name))))))
 
 (defun organization-form ( &optional name-error-message)
 "Creates the basic template to add an organization. name-error-message is optional."

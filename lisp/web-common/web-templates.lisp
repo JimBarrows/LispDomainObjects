@@ -12,7 +12,7 @@
 (defparameter *javascript-files* '("https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js")
 "List of javascript files to include in the template")
 
-(defparameter *css-files* '( "http://twitter.github.com/bootstrap/assets/css/bootstrap-1.1.1.min.css")
+(defparameter *css-files* '( "http://twitter.github.com/bootstrap/1.4.0/bootstrap.css")
 "List of css files to include in the template")
 
 (defvar *menus* nil
@@ -58,7 +58,7 @@
 "Adds menus to the toolbar."
 (unless (null menu-entry)
 		(let ((cur-menu (first menu-entry)))
-				 (cl-who:with-html-output (*standard-output*)
+				 (cl-who:with-html-output (*standard-output* nil :indent t)
 					 (:a :href "#" :class "menu"  (format *standard-output* (menu-entry-name cur-menu)))
 					(:ul :class "menu-dropdown"
 							 (sub-menu (menu-entry-items cur-menu))))
@@ -67,14 +67,14 @@
 (defun javascript-links (javascript-file-list)
 "Create javascript link tags from the list passed in."
 ( unless (null javascript-file-list) 
-		 (cl-who:with-html-output (*standard-output*) 
+		 (cl-who:with-html-output (*standard-output* nil :indent t) 
 		 (:script :src (first javascript-file-list) :type "text/javascript") 
 		 (javascript-links (rest javascript-file-list)))))
 
 (defun css-links (css-list)
 "Cretae css link tags from the list passed in."
 ( unless (null css-list)
-	(cl-who:with-html-output (*standard-output*)
+	(cl-who:with-html-output (*standard-output* nil :indent t)
 		(:link :href (first css-list) :rel "stylesheet" :type "text/css")
 		(css-links (rest css-list)))))
 
