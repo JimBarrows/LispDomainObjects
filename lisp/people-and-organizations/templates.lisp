@@ -30,9 +30,11 @@
 (cl-who:with-html-output (*standard-output* nil :indent t)
 	(:section :class "vcard"
 						(:span :class "org" 
-									 (cl-who:str (getf party :name))))))
+									 (cl-who:str (getf party :name)))
+						(:a :href *edit-organization-url* 
+								(:img :src web-common:*edit-image* :alt "Edit vcard")))))
 
-(defun organization-form ( &optional name-error-message)
+(defun organization-form ( &optional organization-id name-error-message)
 "Creates the basic template to add an organization. name-error-message is optional."
 (web-common::with-html 
 	(:form :action *save-organization-url* :method "post"

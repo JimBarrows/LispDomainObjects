@@ -35,9 +35,10 @@
 ;																									 web-utils:for-list-of-plists-convert-all-simple-dates-to-y-m-d (product:list-products))))))
 
 (push( create-folder-dispatcher-and-handler "/js/" "../javascript/") *dispatch-table*)
+(push( create-folder-dispatcher-and-handler "/img/" "../img/") *dispatch-table*)
+(print (directory "."))
+(defparameter *edit-image* "/img/silk/pencil.png")
 
 (connect-to-database)
-
-;(hunchentoot:start (make-instance 'hunchentoot:acceptor :port 8080)))
 
 (defvar *ht-server* (start (make-instance 'acceptor :port 8080)))
