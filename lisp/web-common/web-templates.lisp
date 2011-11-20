@@ -21,6 +21,21 @@
 (defvar *page-title* "MBMS"
 "The title that goes in the head tags, and the main menu bar")
 
+(defun add-button ( uri entity-name)
+"Creates a button for adding an entity to the datbase. Uses the uri provided to direct the user to the appropriate page"
+(cl-who:with-html-output (*standard-output* nil :indent t)
+	(:a :href uri (cl-who:fmt "Add ~a" entity-name))))
+
+(defun edit-button ( uri entity-name params &optional (icon-only-p t))
+"Create a button for editing an entity and saving it to the database.  Uses the uri to direc the user to the page.  Attaches the params, which must be a plist, to the end of the URI.  If icon-only-p is true then no text is emitted, only the icon."
+(let ((uri-with-params (concatenate 'string uri (format nil "~@[?~{~a=~a~^&~}~]" params)))
+			(label (concatenate 'string "Edit " entity-name)))
+	(cl-who:with-html-output (*standard-output* nil :indent t)
+		(if icon-only-p
+				(cl-who:htm (:a :href uri-with-params
+												(:img :src *edit-image* :alt label)))
+				(cl-who:htm (:a :href uri-with-params (cl-who:str label)))))))
+
 (defun add-javascript-file (filename)
 "Adds a javascript file to the list of files to be included in the template"
 (setf *javascript-files* (append *javascript-files* filename)))

@@ -4,7 +4,7 @@
 "Creates a list of people and organizations"
 	(web-common::with-html 
 		(:section :id "people-and-organization-list" 
-							(:a :href *add-organization-url* "Add Organization")
+							(web-common:add-button *add-organization-url* "Add Organization")
 							(let ((result-list (people-and-organizations-query))
 										(columns 3))
 								(loop for i from 0 to (list-length result-list) by 3 do
@@ -31,8 +31,11 @@
 	(:section :class "vcard"
 						(:span :class "org" 
 									 (cl-who:str (getf party :name)))
-						(:a :href *edit-organization-url* 
-								(:img :src web-common:*edit-image* :alt "Edit vcard")))))
+						(web-common:edit-button *edit-organization-url* "Vcard" 
+																		(let 
+																				((param-list '(:organization-id))) 
+																			(reverse 
+																			 (push (getf party :id) param-list)))))))
 
 (defun organization-form ( &optional organization-id name-error-message)
 "Creates the basic template to add an organization. name-error-message is optional."

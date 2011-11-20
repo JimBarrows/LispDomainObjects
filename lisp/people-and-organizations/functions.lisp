@@ -12,7 +12,7 @@
 "Create a list of people and organizations"
 (query 
  ( :order-by 
-	 (:select (:as 'party_names.name 'name) (:as 'party_types.name 'type)
+	 (:select (:as 'parties.id 'id) (:as 'party_names.name 'name) (:as 'party_types.name 'type)
 						:from 'parties 'party_names 'party_types
 						:where (:and 
 										(:= 'parties.id 'party_names.party_id)
