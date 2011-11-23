@@ -15,7 +15,7 @@
 	(:export add-css-file add-javascript-file add-menu with-html menu-entry menu-item *edit-image* add-button edit-button))
 
 (defpackage people-and-organizations
-  (:use :cl :postmodern )
+  (:use :cl :postmodern :database-utils :web-common :utils)
   (:export build-database))
 
 ;(defpackage product

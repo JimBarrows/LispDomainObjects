@@ -28,7 +28,7 @@
 
 (defun edit-button ( uri entity-name params &optional (icon-only-p t))
 "Create a button for editing an entity and saving it to the database.  Uses the uri to direc the user to the page.  Attaches the params, which must be a plist, to the end of the URI.  If icon-only-p is true then no text is emitted, only the icon."
-(let ((uri-with-params (concatenate 'string uri (format nil "~@[?~{~a=~a~^&~}~]" params)))
+(let ((uri-with-params (concatenate 'string uri (format nil "~@[?~{~(~a~)=~a~^&~}~]" params)))
 			(label (concatenate 'string "Edit " entity-name)))
 	(cl-who:with-html-output (*standard-output* nil :indent t)
 		(if icon-only-p

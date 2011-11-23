@@ -27,40 +27,60 @@
 												 
 (defun vcard (party)
 "Generates an html version of the vcard format"
-(cl-who:with-html-output (*standard-output* nil :indent t)
-	(:section :class "vcard"
-						(:span :class "org" 
-									 (cl-who:str (getf party :name)))
-						(web-common:edit-button *edit-organization-url* "Vcard" 
+(unless (null party)
+	(cl-who:with-html-output (*standard-output* nil :indent t)
+		(:section :class "vcard"
+							(:span :class "org" 
+										 (cl-who:str (getf party :name)))
+							(web-common:edit-button *edit-organization-url* "Vcard" 
 																		(let 
 																				((param-list '(:organization-id))) 
 																			(reverse 
-																			 (push (getf party :id) param-list)))))))
+																			 (push (getf party :id) param-list))))))))
 
-(defun organization-form ( &optional organization-id name-error-message)
+(defun organization-form ( &optional (organization-id 0) name-error-message)
 "Creates the basic template to add an organization. name-error-message is optional."
-(web-common::with-html 
-	(:form :action *save-organization-url* :method "post"
-				 (:div :class (if (null name-error-message) "clearfix" "clearfix error")
-							 (:label :for "name" "Organization Name")
-							 (:div :class "input"
-										 (:input :type "text" :name "name"))
-							(:span :class "help-inline" (cl-who:fmt "~a" name-error-message)))
-				 (:div :class "clearfix"
-							 (:label :for "type-id" "Type")
-							 (:div :class "input"
-										 (:select :name "type-id" 
-															(loop for cur-org-type in (organization-type-list)
-																 do (cl-who:htm
-																		 (:option :value (getf cur-org-type :id) (cl-who:fmt "~a" (getf cur-org-type :name))))))))
-				 (:div :class "actions"
-							 (:button :class "btn primary" :name "save" :type "submit" "Save")))))
+(with-html 
+	(let ( ( organization (find-organization organization-id)))
+		(cl-who:htm 
+		 (:form :action *save-organization-url* :method "post"
+						(unless (null organization) (cl-who:htm 
+																				 (:input :type "hidden" :name "organization-id" :value organization-id)))
+						(:div :class (if (null name-error-message) "clearfix" "clearfix error")
+									(:label :for "name" "Organization Name")
+									(:div :class "input"
+												(:input :type "text" :name "name" :value (if (null organization) 
+																																		 (cl-who:str "") 
+																																		 (getf organization :name))))
+									(unless (null name-error-message) 
+										(cl-who:htm (:span :class "help-inline" (cl-who:fmt "~a" name-error-message))))
+									(cl-who:htm (:div :class "clearfix"
+																		(:label :for "type-id" "Type")
+																		(:div :class "input"
+																					(:select :name "type-id" 
+																									 (loop for cur-org-type in (organization-type-list)
+																											do (cl-who:htm
+																													(let ((id ( getf cur-org-type :id))
+																																(name (getf cur-org-type :name))
+																																(type (getf organization :type)))
+																														(if (equal name type) 
+																																(cl-who:htm (:option 
+																																						 :value id 
+																																						 :selected "selected"
+																																						 (cl-who:fmt "~a" name)))
+																																(cl-who:htm (:option 
+																																						 :value id 
+																																						 (cl-who:fmt "~a" name)))))))))))
+									(cl-who:htm (:div :class "actions"
+																		(:button :class "btn primary" :name "save" :type "submit" "Save")))))))))
 
-(defun save-organization ( name type-id)
+(defun save-organization ( organization-id name type-id)
 "Saves an organization to the database, sets a message and returns to the list"
 (let (( name (string-trim " " name)))
 	(if (equal "" name) 
-			(organization-form "Name is required")
+			(organization-form nil "Name is required")
 			(progn
-				(create-organization name type-id)
+				(if (null organization-id)
+						(create-organization name type-id)
+						(update-organization organization-id name type-id))
 				(hunchentoot:redirect *people-and-organizations-url*)))))

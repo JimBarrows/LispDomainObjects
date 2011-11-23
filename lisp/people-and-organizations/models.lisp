@@ -24,7 +24,7 @@
 		( :create-table parties  
 			( ( id :type serial :primary-key t)
 				( version :type integer )
-				( type :type bigint ))))
+				( type_id :type bigint ))))
 	( execute
 		( :create-table party_names
 			( ( name_type_id :type bigint :references (name_types :cascade :cascade))

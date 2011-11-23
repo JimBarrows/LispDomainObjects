@@ -12,11 +12,13 @@
 "Create a list of people and organizations"
 (query 
  ( :order-by 
-	 (:select (:as 'parties.id 'id) (:as 'party_names.name 'name) (:as 'party_types.name 'type)
+	 (:select (:as 'parties.id 'id) 
+						(:as 'party_names.name 'name) 
+						(:as 'party_types.name 'type)
 						:from 'parties 'party_names 'party_types
 						:where (:and 
 										(:= 'parties.id 'party_names.party_id)
-										(:= 'parties.type 'party_types.id)))
+										(:= 'parties.type_id 'party_types.id)))
 						'name)
  :plists))
 
@@ -26,13 +28,23 @@
 	(with-transaction ()
 			(let 
 					( ( party-id (query ( :insert-into 'parties :set 
-																						 'type type-id
+																						 'type_id type-id
 																						 'version 0
 																						 :returning 'id) :single)))
 				( execute ( :insert-into 'party_names :set
 																 'name_type_id (find-name-type-id "Name")
 																 'party_id party-id
 																 'name name)))))
+
+(defun update-organization ( organization-id name type-id) 
+	"Update an organizations info."
+	(with-transaction ()
+		(execute ( :update 'parties :set
+											 'type_id type-id
+											 'version 0
+											 :where (:= 'id organization-id)))
+		(execute ( :update 'party_names :set 'name name
+											 :where (:and (:= 'party_id organization-id) (:= 'name_type_id (find-name-type-id "Name")))))))
 
 (defun organization-type-list ()
 	"Return a list of types that inherit from the organization type"
@@ -79,14 +91,16 @@
 	"Retrieve a list of relationships from the relationships table."
 	(query(:select 'id 'description :from 'relationships)))
 
-
-(defun update-organization (id name)
-	"Update the organization name."
-	(execute ( :update 'parties :set 'name name :where (:= 'id id))))
-
 (defun find-organization(id)
 	"Find the organization by it's id"
-	(query( :select 'id 'name :from 'parties :where (:= 'id '$1)) id :plist))
+	(query( :select (:as 'parties.id 'id)  
+									(:as 'party_names.name 'name) 
+									(:as 'party_types.id 'type-id) 
+									(:as 'party_types.name 'type)
+									:from 'parties 'party_names 'party_types
+									:where (:and (:= 'parties.id 'party_names.party_id) 
+															 (:= 'parties.type_id 'party_types.id)
+															 (:= 'parties.id '$1))) id :plist))
 
 (defun add-role-to-party (party-id role-name)
 	"Adds a role, by name to, a party"
