@@ -38,6 +38,16 @@
 												(:img :src *edit-image* :alt label)))
 				(cl-who:htm (:a :href uri-with-params (cl-who:str label)))))))
 
+(defun delete-button ( uri entity-name params &optional (icon-only-p t))
+"Creates a button for deleting an entity."
+(let (( uri-with-params ( concatenate 'string uri (format nil "~@[?~{~(~a~)=~a~^&~}~]" params)))
+			(label (concatenate 'string "delete " entity-name)))
+	(cl-who:with-html-output (*standard-output* nil :indent t)
+		(if icon-only-p
+				(cl-who:htm (:a :href uri-with-params
+												(:img :src *delete-image* :alt label)))
+				(cl-who:htm (:a :href uri-with-params (cl-who:str label)))))))
+
 (defun add-javascript-file (filename)
 "Adds a javascript file to the list of files to be included in the template"
 (setf *javascript-files* (append *javascript-files* filename)))
@@ -94,10 +104,6 @@
 	(cl-who:with-html-output (*standard-output* nil :indent t)
 		(:link :href (first css-list) :rel "stylesheet" :type "text/css")
 		(css-links (rest css-list)))))
-
-;(defun title () 
-;"prints the *page-title* to standard-out, formatted"
-;(format *standard-output* "~a - ~a" *application-name* *page-title*))
 
 (defun set-page-title ( title)
 "Creates the html necessary to output a page title"

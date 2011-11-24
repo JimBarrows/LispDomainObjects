@@ -15,6 +15,7 @@
 	(:export add-css-file 
 					 add-javascript-file 
 					 add-menu 
+					 delete-button
 					 main-template 
 					 menu-entry 
 					 menu-item 

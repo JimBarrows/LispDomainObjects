@@ -46,6 +46,15 @@
 		(execute ( :update 'party_names :set 'name name
 											 :where (:and (:= 'party_id organization-id) (:= 'name_type_id (find-name-type-id "Name")))))))
 
+(defun delete-from-organization ( organization-id) 
+	"Delete an organizations info."
+	(with-transaction ()
+		(execute ( :delete-from 'parties 
+											 :where (:= 'id organization-id)))
+		(execute ( :delete-from 'party_names
+											 :where (:and (:= 'party_id organization-id) (:= 'name_type_id (find-name-type-id "Name")))))))
+
+
 (defun organization-type-list ()
 	"Return a list of types that inherit from the organization type"
 	(party-type-list (find-party-type-id "Organization")))

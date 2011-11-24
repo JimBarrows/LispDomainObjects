@@ -39,6 +39,7 @@
 (push( create-folder-dispatcher-and-handler "/img/" "../img/") *dispatch-table*)
 
 (defparameter *edit-image* "/img/silk/pencil.png")
+(defparameter *delete-image* "/img/silk/delete.png")
 
 (connect-to-database)
 

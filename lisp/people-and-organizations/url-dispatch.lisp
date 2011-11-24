@@ -10,6 +10,7 @@
 (defparameter *add-organization-url* (concatenate 'string *organization-url* "/add"))
 (defparameter *edit-organization-url* (concatenate 'string *organization-url* "/edit"))
 (defparameter *save-organization-url* (concatenate 'string *organization-url* "/save"))
+(defparameter *delete-organization-url* (concatenate 'string *organization-url* "/delete"))
 
 (hunchentoot:define-easy-handler (list-people-and-organizations :uri *people-and-organizations-url* :default-request-type :get) ()
 	(people-and-organizations-list))
@@ -22,3 +23,6 @@
 
 (hunchentoot:define-easy-handler (save-organization-handler :uri *save-organization-url* :default-request-type :post) (organization-id name type-id)
 	(save-organization organization-id name type-id))
+
+(hunchentoot:define-easy-handler (delete-organization-handler :uri *delete-organization-url* :default-request-type :get) (organization-id)
+	(delete-organization organization-id))

@@ -37,7 +37,12 @@
 																		(let 
 																				((param-list '(:organization-id))) 
 																			(reverse 
-																			 (push (getf party :id) param-list))))))))
+																			 (push (getf party :id) param-list))))
+							(web-common:delete-button *delete-organization-url* "Vcard"
+																				(let
+																						((param-list '(:organization-id)))
+																					(reverse
+																					 (push (getf party :id) param-list))))))))
 
 (defun organization-form ( &optional (organization-id 0) name-error-message)
 "Creates the basic template to add an organization. name-error-message is optional."
@@ -88,3 +93,10 @@
 						(create-organization name type-id)
 						(update-organization organization-id name type-id))
 				(hunchentoot:redirect *people-and-organizations-url*)))))
+
+(defun delete-organization ( organization-id)
+"Deletes an organization to the database, sets a message and returns to the list"
+(if (null organization-id)
+						(print "woops, no id")
+						(delete-from-organization organization-id))
+				(hunchentoot:redirect *people-and-organizations-url*))
