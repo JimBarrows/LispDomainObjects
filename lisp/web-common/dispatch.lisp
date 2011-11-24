@@ -7,7 +7,8 @@
 (setf *catch-errors-p* t)
 
 (defun main-page()	
-	(with-html ))
+	(main-template 
+		(set-page-title "Main")))
 
 (setq *default-handler* 'main-page)
 
@@ -36,7 +37,7 @@
 
 (push( create-folder-dispatcher-and-handler "/js/" "../javascript/") *dispatch-table*)
 (push( create-folder-dispatcher-and-handler "/img/" "../img/") *dispatch-table*)
-(print (directory "."))
+
 (defparameter *edit-image* "/img/silk/pencil.png")
 
 (connect-to-database)

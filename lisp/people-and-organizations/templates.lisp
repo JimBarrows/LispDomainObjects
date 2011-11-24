@@ -2,15 +2,16 @@
 
 (defun people-and-organizations-list ()
 "Creates a list of people and organizations"
-	(web-common::with-html 
-		(:section :id "people-and-organization-list" 
-							(web-common:add-button *add-organization-url* "Add Organization")
-							(let ((result-list (people-and-organizations-query))
-										(columns 3))
-								(loop for i from 0 to (list-length result-list) by 3 do
-											 (people-and-organizations-row (list (nth i result-list) 
-																													 (nth (+ 1 i) result-list)
-																													 (nth (+ 2 i) result-list))))))))
+(set-page-title "People and Organizations")
+	(web-common::main-template
+		(:div :class "content"
+					(add-button *add-organization-url* "Organization")
+					(let ((result-list (people-and-organizations-query))
+								(columns 3))
+						(loop for i from 0 to (list-length result-list) by 3 do
+								 (people-and-organizations-row (list (nth i result-list) 
+																										 (nth (+ 1 i) result-list)
+																										 (nth (+ 2 i) result-list))))))))
 
 (defun people-and-organizations-row( row-list)
 "Writes one row of the list"
@@ -40,9 +41,12 @@
 
 (defun organization-form ( &optional (organization-id 0) name-error-message)
 "Creates the basic template to add an organization. name-error-message is optional."
-(with-html 
-	(let ( ( organization (find-organization organization-id)))
-		(cl-who:htm 
+(let ( (organization (find-organization organization-id)))
+	(if (null organization)
+			(set-page-title "Add Organization")
+			(set-page-title "Edit Organization"))
+	(web-common:main-template
+		(cl-who:htm 		 
 		 (:form :action *save-organization-url* :method "post"
 						(unless (null organization) (cl-who:htm 
 																				 (:input :type "hidden" :name "organization-id" :value organization-id)))

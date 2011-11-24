@@ -9,6 +9,8 @@
 (setf hunchentoot::*show-lisp-errors-p* t)
 (setf *catch-errors-p* t)
 
+(defvar *application-name* "MBMS")
+
 (defparameter *javascript-files* '("https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js")
 "List of javascript files to include in the template")
 
@@ -18,7 +20,7 @@
 (defvar *menus* nil
 "List of menus to add to the main toolbar")
 
-(defvar *page-title* "MBMS"
+(defparameter *page-title* "MBMS"
 "The title that goes in the head tags, and the main menu bar")
 
 (defun add-button ( uri entity-name)
@@ -93,33 +95,39 @@
 		(:link :href (first css-list) :rel "stylesheet" :type "text/css")
 		(css-links (rest css-list)))))
 
-(defun title () 
-"prints the *page-title* to standard-out, formatted"
-(format *standard-output* "~a" *page-title*))
+;(defun title () 
+;"prints the *page-title* to standard-out, formatted"
+;(format *standard-output* "~a - ~a" *application-name* *page-title*))
 
-(defmacro with-html (&body body)
+(defun set-page-title ( title)
+"Creates the html necessary to output a page title"
+(setf *page-title* title))
+
+
+(defmacro main-template (&body body)
 	"Wraps the body provided in an html template"
-	
 	`(cl-who:with-html-output-to-string 
 			 (*standard-output* nil :prologue t :indent t) 
 		 (:html
 			(:head 
+			 (:meta :charset "utf-8")
+			 (:title (cl-who:fmt "~a - ~a" *application-name* *page-title*))
 			 (css-links *css-files*)
 			 (javascript-links *javascript-files*)
-			 (:title (title))
 			 (:script :type "text/javascript"
 								(str (ps ( $ document (ready (lambda () (progn 
 																													(chain ($ "body") (bind "click" (lambda (e) ( chain ($ "a.menu") (parent "li") (remove-class "open")))))
 																													(chain ($ "a.menu") (click (lambda (e) (progn (defvar $li (chain ($ this) (parent "li") (toggle-class "open"))) false)))) false))))))))
-
 			(:body :style "padding-top: 40px"
-						 (:div :class "topbar-wrapper" :style "z-index: 5"
-									 (:div :class "topbar" 
-												(:div :class "fill"
-															(:div :class "container"
-																		(:h3
-																		 (:a :href "/" (title)))
-																		(:ul :class "nav"
-																				 (:li :class "menu"
-																							(menu *menus*)))))))
-						 (:div :class "container" ,@body)))))
+						 (:div :class "topbar" 
+									 (:div :class "fill"
+												 (:div :class "container"
+															 (:a :class "brand" :href "/" (cl-who:fmt "~a" *application-name*))
+															 (:ul :class "nav"																				 
+																		(:li :class "menu"
+																				 (menu *menus*))))))
+						 (:div :class "container"
+									 (:div :class "content"
+												 (:div :class "page-header"
+															 (:h1 (cl-who:str *page-title*)))
+												 ,@body))))))
