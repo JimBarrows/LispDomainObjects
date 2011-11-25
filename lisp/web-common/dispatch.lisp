@@ -4,8 +4,9 @@
 (setf cl-who::*html-mode* :HTML5)
 (setf parenscript::*js-string-delimiter* #\")
 (setf hunchentoot::*show-lisp-errors-p* t)
-(setf *catch-errors-p* t)
-
+(setf *catch-errors-p* nil)
+(setf *lisp-errors-log-level* :info)
+(setf *lisp-warnings-log-level* :info)
 (defun main-page()	
 	(main-template 
 		(set-page-title "Main")))

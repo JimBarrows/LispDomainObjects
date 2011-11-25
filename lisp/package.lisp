@@ -12,20 +12,23 @@
 
 (defpackage web-common
 	(:use :cl :parenscript :cl-who :hunchentoot :simple-date :database-utils)
-	(:export add-css-file 
-					 add-javascript-file 
-					 add-menu 
-					 delete-button
-					 main-template 
-					 menu-entry 
-					 menu-item 
-					 set-page-title 
-					 *edit-image*
-					 add-button 
-					 edit-button))
+	(:export 
+	 add-button
+	 add-css-file 
+	 add-javascript-file 
+	 add-menu 
+	 delete-button
+	 edit-button
+	 *edit-image*
+	 input-text-field
+	 main-template 
+	 menu-entry 
+	 menu-item 
+	 set-page-title 
+	 add-button ))
 
 (defpackage people-and-organizations
-  (:use :cl :postmodern :database-utils :web-common :utils)
+  (:use :cl :cl-who :database-utils :postmodern :web-common :utils)
   (:export build-database))
 
 ;(defpackage product

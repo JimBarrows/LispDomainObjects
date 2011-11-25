@@ -23,6 +23,16 @@
 (defparameter *page-title* "MBMS"
 "The title that goes in the head tags, and the main menu bar")
 
+(defun input-text-field ( name label value &optional error-message)
+"Creates a text box, with optional error message"
+(cl-who:with-html-output (*standard-output* nil :indent t)
+	(:div :class (if (null error-message) "clearfix" "clearfix error")
+				(:label :for name (str label))
+				(:div :class "input"
+							(:input :type "text" :name name :value value))
+				(unless (null error-message)
+					(htm (:span :class "help-inline" (str error-message)))))))
+
 (defun add-button ( uri entity-name)
 "Creates a button for adding an entity to the datbase. Uses the uri provided to direct the user to the appropriate page"
 (cl-who:with-html-output (*standard-output* nil :indent t)

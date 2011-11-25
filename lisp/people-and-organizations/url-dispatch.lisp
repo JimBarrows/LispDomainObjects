@@ -7,10 +7,13 @@
 
 (defparameter *people-and-organizations-url* "/people-and-organizations")
 (defparameter *organization-url* (concatenate 'string *people-and-organizations-url* "/organization"))
+(defparameter *person-url* (concatenate 'string *people-and-organizations-url* "/person"))
 (defparameter *add-organization-url* (concatenate 'string *organization-url* "/add"))
 (defparameter *edit-organization-url* (concatenate 'string *organization-url* "/edit"))
 (defparameter *save-organization-url* (concatenate 'string *organization-url* "/save"))
 (defparameter *delete-organization-url* (concatenate 'string *organization-url* "/delete"))
+(defparameter *add-person-url* (concatenate 'string *person-url* "/add"))
+(defparameter *save-person-url* (concatenate 'string *person-url* "/save"))
 
 (hunchentoot:define-easy-handler (list-people-and-organizations :uri *people-and-organizations-url* :default-request-type :get) ()
 	(people-and-organizations-list))
@@ -26,3 +29,6 @@
 
 (hunchentoot:define-easy-handler (delete-organization-handler :uri *delete-organization-url* :default-request-type :get) (organization-id)
 	(delete-organization organization-id))
+
+(hunchentoot:define-easy-handler (add-party :uri *add-person-url* :default-request-type :get) ()
+	(person-form))
