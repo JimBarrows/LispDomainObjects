@@ -2,7 +2,8 @@
 
 (defun load-data () 
 	(insert-name-type-records)
-	(insert-party-type-records))
+	(insert-party-type-records)
+	(insert-marital-status-type-records))
 
 (defun insert-name-type-records () 
 	"Initial data load for name types"
@@ -29,4 +30,9 @@
 			(execute ( :insert-into 'party_types :set 'name "Team" 'version 0 'parent org-id))
 			(execute ( :insert-into 'party_types :set 'name "Family" 'version 0 'parent org-id))
 			(execute ( :insert-into 'party_types :set 'name "Club" 'version 0 'parent org-id))))
+
+(defun insert-marital-status-type-records ()
+	(execute ( :insert-into 'marital_status_type :set 'name "Married"))
+	(execute ( :insert-into 'marital_status_type :set 'name "Single"))
+	(execute ( :insert-into 'marital_status_type :set 'name "Divorced")))
 			
