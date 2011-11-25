@@ -22,7 +22,7 @@
 	(organization-form))
 
 (hunchentoot:define-easy-handler (edit-organization :uri *edit-organization-url* :default-request-type :get) ( organization-id)
-	(organization-form organization-id nil))
+	(organization-form :organization-id organization-id ))
 
 (hunchentoot:define-easy-handler (save-organization-handler :uri *save-organization-url* :default-request-type :post) (organization-id name type-id)
 	(save-organization organization-id name type-id))

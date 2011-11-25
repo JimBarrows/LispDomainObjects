@@ -25,6 +25,7 @@
 	 menu-entry 
 	 menu-item 
 	 set-page-title 
+	 type-select-field
 	 add-button ))
 
 (defpackage people-and-organizations

@@ -23,6 +23,27 @@
 (defparameter *page-title* "MBMS"
 "The title that goes in the head tags, and the main menu bar")
 
+(defun type-select-field (name label list &key (selected "" selected-p) (error-message "" error-message-p))
+"Create a select field from a list of types, that should be id/name plists"
+(cl-who:with-html-output (*standard-output* nil :indent t)
+	(:div :class (if error-message-p "clearfix error" "clearfix")
+				(htm (:label :for name (str label)))
+				(:div :class "input"
+							(:select :name name
+											 (dolist (cur-type list)
+												 (let (( id (getf cur-type :id))
+															 ( name (getf cur-type :name)))
+													 (if (equal name selected)
+															 (htm (:option
+																		 :selected "true"
+																		 :value id
+																		 (str name)))
+															 (htm (:option
+																		 :value id
+																		 (str name))))))))
+				(unless (null error-message)
+					(htm (:sapn :class "help-inline" (str error-message)))))))
+
 (defun input-text-field ( name label value &optional error-message)
 "Creates a text box, with optional error message"
 (cl-who:with-html-output (*standard-output* nil :indent t)
