@@ -9,18 +9,45 @@
 	(load-data))
 
 (defun people-and-organizations-query ()
-"Create a list of people and organizations"
-(query 
- ( :order-by 
-	 (:select (:as 'parties.id 'id) 
-						(:as 'party_names.name 'name) 
-						(:as 'party_types.name 'type)
-						:from 'parties 'party_names 'party_types
-						:where (:and 
-										(:= 'parties.id 'party_names.party_id)
-										(:= 'parties.type_id 'party_types.id)))
-						'name)
- :plists))
+	"Create a list of people and organizations"
+	(query (:order-by 
+										(:union
+										 (:select (:as 'first_names.name 'first_name)
+															(:as 'middle_names.name 'middle_name)
+															(:as 'last_names.name 'last_name)
+															'parties.id
+															(:as 'party_types.name 'type)
+															:from 'parties 
+															(:as 'party_names 'first_names) 
+															'party_types
+															(:as 'party_names 'middle_names)
+															(:as 'party_names 'last_names)
+															(:as 'name_types 'first_name_type)
+															(:as 'name_types 'middle_name_type)
+															(:as 'name_types 'last_name_type)
+															:where (:and (:= 'parties.id 'first_names.party_id)
+																					 (:= 'first_names.name_type_id 'first_name_type.id)
+																					 (:= 'first_name_type.name "First")
+																					 (:= 'parties.id 'middle_names.party_id)
+																					 (:= 'middle_names.name_type_id 'middle_name_type.id)
+																					 (:= 'middle_name_type.name "Middle")
+																					 (:= 'parties.id 'last_names.party_id)
+																					 (:= 'last_names.name_type_id 'last_name_type.id)
+																					 (:= 'last_name_type.name "Last")
+																					 (:= 'parties.type_id 'party_types.id)
+																					 (:= 'party_types.name "Person")))
+										 (:select "" "" 'names_.name 'parties.id (:as 'party_types.name 'type)
+															:from 'parties 
+															(:as 'party_names 'names_) 
+															(:as 'name_types 'names_type)
+															'party_types
+															:where (:and (:= 'parties.id 'names_.party_id)
+																					 (:= 'names_.name_type_id 'names_type.id)
+																					 (:= 'names_type.name "Name")
+																					 (:= 'parties.type_id 'party_types.id))))
+										'last_name 'first_name 'middle_name )
+				 :plists))
+					
 
 
 (defun create-organization (name type-id)
@@ -36,6 +63,28 @@
 																 'party_id party-id
 																 'name name)))))
 
+(defun insert-person (first-name middle-name last-name)
+	"Insert a person record into the database."
+	(with-transaction ()
+			(let 
+					( ( party-id (query ( :insert-into 'parties :set 
+																						 'type_id (find-party-type-id "Person")
+																						 'version 0
+																						 :returning 'id) :single)))
+				( execute ( :insert-into 'party_names :set
+																 'name_type_id (find-name-type-id "First")
+																 'party_id party-id
+																 'name first-name))
+				( execute ( :insert-into 'party_names :set
+																 'name_type_id (find-name-type-id "Middle")
+																 'party_id party-id
+																 'name middle-name))
+				( execute ( :insert-into 'party_names :set
+																 'name_type_id (find-name-type-id "Last")
+																 'party_id party-id
+																 'name last-name)))))
+
+
 (defun update-organization ( organization-id name type-id) 
 	"Update an organizations info."
 	(with-transaction ()
@@ -45,6 +94,16 @@
 											 :where (:= 'id organization-id)))
 		(execute ( :update 'party_names :set 'name name
 											 :where (:and (:= 'party_id organization-id) (:= 'name_type_id (find-name-type-id "Name")))))))
+
+(defun update-person ( first-name middle-name last-name person-id)
+	"Update a persons info."
+	(with-transaction ()
+		(execute ( :update 'party_names :set 'name first-name
+											 :where (:and (:= 'party_id person-id) (:= 'name_type_id (find-name-type-id "First")))))
+		(execute ( :update 'party_names :set 'name middle-name
+											 :where (:and (:= 'party_id person-id) (:= 'name_type_id (find-name-type-id "Middle")))))
+		(execute ( :update 'party_names :set 'name last-name
+											 :where (:and (:= 'party_id organization-id) (:= 'name_type_id (find-name-type-id "Last")))))))
 
 (defun delete-from-organization ( organization-id) 
 	"Delete an organizations info."
@@ -74,7 +133,7 @@
 (defun find-party-type-id (type-name)
 	"Find the id for the provided type-name, or raise an error if it doesn't exist"
 	(query
-		( :select 'id :from 'party_types :where (:= 'name '$1)) type-name :single))
+	 ( :select 'id :from 'party_types :where (:= 'name '$1)) type-name :single))
 
 (defun find-name-type-id (name-type)
 	"Find the id for the provided name-type, or raise an error if it doesn't exist"
@@ -109,6 +168,14 @@
 									:from 'parties 'party_names 'party_types
 									:where (:and (:= 'parties.id 'party_names.party_id) 
 															 (:= 'parties.type_id 'party_types.id)
+															 (:= 'parties.id '$1))) id :plist))
+
+(defun find-person(id)
+	"Find a person by the id"
+	(query( :select (:as 'parties.id 'id)  
+									(:as 'party_names.name 'name) 
+									:from 'parties 'party_names 
+									:where (:and (:= 'parties.id 'party_names.party_id) 
 															 (:= 'parties.id '$1))) id :plist))
 
 (defun add-role-to-party (party-id role-name)

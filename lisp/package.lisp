@@ -24,6 +24,7 @@
 	 main-template 
 	 menu-entry 
 	 menu-item 
+	 primary-key-field
 	 set-page-title 
 	 type-select-field
 	 add-button ))

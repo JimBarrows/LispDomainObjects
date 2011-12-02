@@ -28,65 +28,59 @@
 				(vcard party))))
 												 
 (defun vcard (party)
-"Generates an html version of the vcard format"
-(unless (null party)
-	(cl-who:with-html-output (*standard-output* nil :indent t)
-		(:section :class "vcard"
-							(:span :class "org" 
-										 (cl-who:str (getf party :name)))
-							(web-common:edit-button *edit-organization-url* "Vcard" 
-																		(let 
-																				((param-list '(:organization-id))) 
-																			(reverse 
-																			 (push (getf party :id) param-list))))
-							(web-common:delete-button *delete-organization-url* "Vcard"
-																				(let
-																						((param-list '(:organization-id)))
-																					(reverse
-																					 (push (getf party :id) param-list))))))))
+	"Generates an html version of the vcard format"
+	(unless (null party)
+		(let (( type (getf party :type))
+						( first-name (getf party :first-name))
+						( middle-name (getf party :middle-name))
+						( last-name (getf party :last-name)))
+			(cl-who:with-html-output (*standard-output* nil :indent t)
+				(:section :class "vcard"
+									(:span :class (if (equal type "Person") "fn" "org fn" )
+												 (if (equal type "Person") 
+														 (fmt "~a ~a ~a " first-name middle-name last-name)
+														 (str last-name)))
+												 (web-common:edit-button *edit-organization-url* "Vcard" 
+																								 (let 
+																										 ((param-list '(:organization-id))) 
+																									 (reverse 
+																										(push (getf party :id) param-list))))
+												 (web-common:delete-button *delete-organization-url* "Vcard"
+																									 (let
+																											 ((param-list '(:organization-id)))
+																										 (reverse
+																											(push (getf party :id) param-list)))))))))
 
 (defun organization-form ( &key (organization-id 0 organization-id-p) name-error-message)
 "Creates the basic template to add an organization. name-error-message is optional."
+(if organization-id-p
+		(set-page-title "Edit Organization")
+		(set-page-title "Add Organization"))
 (let ( (organization (find-organization organization-id)))
-	(if organization-id-p
-			(set-page-title "Add Organization")
-			(set-page-title "Edit Organization"))
-	(web-common:main-template 
+	(main-template 
 		 (:form :action *save-organization-url* :method "post"
-						(unless organization-id-p (cl-who:htm 
-																				 (:input :type "hidden" :name "organization-id" :value organization-id)))
+						(if organization-id-p (primary-key-field "organization-id" organization-id))
 						(input-text-field "name" "Organization Name" (getf organization :name) name-error-message)
-						(type-select-field "type-id" "Type" (organization-type-list) :selected (getf organization :type))
-;						(:div :class "clearfix"
-;									(:label :for "type-id" "Type")
-;									(:div :class "input"
-;												(:select :name "type-id" 
-;																 (loop for cur-org-type in (organization-type-list)
-;																		do (cl-who:htm
-;																				(let ((id ( getf cur-org-type :id))
-;																							(name (getf cur-org-type :name))
-;																							(type (getf organization :type)))
-;																					(if (equal name type) 
-;																							(cl-who:htm (:option 
-;																													 :value id 
-;																													 :selected "selected"
-;																													 (cl-who:fmt "~a" name)))
-;																							(cl-who:htm (:option 
-;																													 :value id 
-;																													 (cl-who:fmt "~a" name))))))))))
-									(cl-who:htm (:div :class "actions"
-																		(:button :class "btn primary" :name "save" :type "submit" "Save")))))))
+						(type-select-field "type-id" "Type" (organization-type-list) 
+															 :selected (getf organization :type))
+						(cl-who:htm (:div :class "actions"
+															(:button :class "btn primary" :name "save" :type "submit" "Save")))))))
 
-(defun person-form() 
+(defun person-form( &key (person-id 0 person-id-p) first-name-error middle-name-error last-name-error )
 "Create a form for a person"
-(set-page-title "Add Person")
-(main-template
-		 (:form :action *save-person-url* :method "post"
-						(input-text-field "First Name" "") 
-						(input-text-field "Middle Name" "") 
-						(input-text-field "Last Name" "") 
-						(htm (:div :class "actions"
-															(:button :class "btn primary" :name "save" :type "submit" "Save"))))))
+(if person-id-p
+		(set-page-title "Edit Person")
+		(set-page-title "Add Person"))
+(let (( person (find-person person-id)))
+	(main-template
+		(:form :action *save-person-url* :method "post"
+					 (if person-id-p
+							 (primary-key-field "person-id" person-id))
+					 (input-text-field "first-name" "First Name" "" first-name-error) 
+					 (input-text-field "middle-name" "Middle Name" "" middle-name-error) 
+					 (input-text-field "last-name" "Last Name" "" last-name-error) 
+					 (htm (:div :class "actions"
+											(:button :class "btn primary" :name "save" :type "submit" "Save")))))))
 
 (defun save-organization ( organization-id name type-id)
 "Saves an organization to the database, sets a message and returns to the list"
@@ -98,6 +92,20 @@
 				(if (null organization-id)
 						(create-organization name type-id)
 						(update-organization organization-id name type-id))
+				(hunchentoot:redirect *people-and-organizations-url*)))))
+
+(defun save-person ( first-name middle-name last-name &optional (person-id 0 person-id-p))
+"Validates the parameters and inserts the records into the database."
+(let ((first-name (string-trim " " first-name))
+			(middle-name (string-trim " " middle-name))
+			(last-name (string-trim " " last-name)))
+	(if (and (equal "" first-name) 
+							( equal "" last-name))
+			(person-form :first-name-error "Either a first name or a last name must be provided" :last-name-error "Either a first name or a last name must be provided")
+			(progn
+				(if person-id-p
+						(update-organization first-name middle-name last-name person-id)
+						(insert-person first-name middle-name last-name))
 				(hunchentoot:redirect *people-and-organizations-url*)))))
 
 (defun delete-organization ( organization-id)

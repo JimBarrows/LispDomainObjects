@@ -23,6 +23,11 @@
 (defparameter *page-title* "MBMS"
 "The title that goes in the head tags, and the main menu bar")
 
+(defun primary-key-field (name value)
+"Generates a hidden form field for a pimary key."
+(cl-who:with-html-output (*standard-output* nil :indent t)
+	(:input :type "hidden" :name name :value value)))
+
 (defun type-select-field (name label list &key (selected "" selected-p) (error-message "" error-message-p))
 "Create a select field from a list of types, that should be id/name plists"
 (cl-who:with-html-output (*standard-output* nil :indent t)
