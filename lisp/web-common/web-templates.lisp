@@ -145,6 +145,16 @@
 "Creates the html necessary to output a page title"
 (setf *page-title* title))
 
+(defun input-date-field ( name label value &optional error-message)
+	"Creates a date box, with optional error message"
+	(cl-who:with-html-output (*standard-output* nil :indent t)
+		(:div :class (if (null error-message) "clearfix" "clearfix error")
+					(:label :for name (str label))
+					(:div :class "input"
+								(:input :type "date" :class "date" :name name :value value))
+					(unless (null error-message)
+						(htm (:span :class "help-inline" (str error-message)))))))
+
 
 (defmacro main-template (&body body)
 	"Wraps the body provided in an html template"
@@ -158,7 +168,13 @@
 			 (javascript-links *javascript-files*)
 			 (:script :type "text/javascript"
 								(str (ps ( $ document (ready (lambda () (progn 
-																													(chain ($ "body") (bind "click" (lambda (e) ( chain ($ "a.menu") (parent "li") (remove-class "open")))))
+																													(chain 
+																													 ($ "body") 
+																													 (bind "click" 
+																																 (lambda (e) 
+																																	 ( chain ($ "a.menu") 
+																																					 (parent "li") 
+																																					 (remove-class "open")))))
 																													(chain ($ "a.menu") (click (lambda (e) (progn (defvar $li (chain ($ this) (parent "li") (toggle-class "open"))) false)))) false))))))))
 			(:body :style "padding-top: 40px"
 						 (:div :class "topbar" 
@@ -172,4 +188,6 @@
 									 (:div :class "content"
 												 (:div :class "page-header"
 															 (:h1 (cl-who:str *page-title*)))
-												 ,@body))))))
+												 ,@body))
+						 (:script :type "text/javascript" 
+											(str (ps (chain ($ ".date") (datepicker)))))))))

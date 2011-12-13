@@ -24,7 +24,8 @@
 		( :create-table parties  
 										( ( id :type serial :primary-key t)
 											( version :type integer )
-											( type_id :type bigint ))))
+											( type_id :type bigint )
+											( gender_type_id :type bigint))))
 	( execute
 		( :create-table party_names
 										( ( name_type_id :type bigint :references (name_types :cascade :cascade) )
@@ -32,21 +33,25 @@
 											( name :type string))
 										(:primary-key name_type_id party_id)))
 	( execute
-		( :create-table marital_status_type
+		( :create-table marital_status_types
 										( ( id :type serial :primary-key t)
 											( name :type string))))
 	( execute
-		( :create-table marital_status
+		( :create-table marital_statuses
 										( (from_date :type date)
-											(thru_date :type date)
+											(thru_date :type (or db-null date))
 											(party_id :type bigint :references (parties :cascade :cascade) )
-											(marital_status_type_id :type bigint :references (marital_status_type :cascade :cascade)))
+											(marital_status_type_id :type bigint :references (marital_status_types :cascade :cascade)))
 											(:primary-key party_id marital_status_type_id)))
+
+	( execute
+		( :create-table gender_types
+										( ( id :type serial :primary-key t)
+											( name :type string))))
 )
 
 (defun drop-tables()
 	"Drop all tables"
-;	(alter-table :drop-constraint marital_status_party_id_fkey :cascade)
 	( execute
 		( :drop-table :if-exists 'party_names  ))
 	( execute
@@ -54,10 +59,12 @@
 	( execute
 		( :drop-table :if-exists 'party_types  ))
 	( execute
-		( :drop-table :if-exists 'marital_status  ))
+		( :drop-table :if-exists 'marital_statuses  ))
 	( execute
 		( :drop-table :if-exists 'parties  ))
 	( execute
-		( :drop-table :if-exists 'marital_status_type  )))
+		( :drop-table :if-exists 'marital_status_types  ))
+	( execute
+		( :drop-table :if-exists 'gender_types  )))
 
 		

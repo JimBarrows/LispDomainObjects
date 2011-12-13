@@ -20,6 +20,7 @@
 	 delete-button
 	 edit-button
 	 *edit-image*
+	 input-date-field
 	 input-text-field
 	 main-template 
 	 menu-entry 
@@ -30,7 +31,7 @@
 	 add-button ))
 
 (defpackage people-and-organizations
-  (:use :cl :cl-who :database-utils :postmodern :web-common :utils)
+  (:use :cl :cl-who :database-utils :postmodern :simple-date :web-common :utils)
   (:export build-database))
 
 ;(defpackage product

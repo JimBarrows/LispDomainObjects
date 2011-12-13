@@ -3,4 +3,4 @@
 
 (defun connect-to-database ()
 	"Create connection to database"
-	(connect-toplevel "mbms" "mbms" "mbms" "localhost"))
+	(connect "mbms-lisp" "mbms" "mbms" "localhost" :pooled-p t))

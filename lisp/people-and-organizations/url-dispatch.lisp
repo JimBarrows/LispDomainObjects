@@ -33,5 +33,5 @@
 (hunchentoot:define-easy-handler (save-organization-handler :uri *save-organization-url* :default-request-type :post) (organization-id name type-id)
 	(save-organization organization-id name type-id))
 
-(hunchentoot:define-easy-handler (save-person-handler :uri *save-person-url* :default-request-type :post) ( first-name middle-name last-name)
-	(save-person first-name middle-name last-name))
+(hunchentoot:define-easy-handler (save-person-handler :uri *save-person-url* :default-request-type :post) ( first-name middle-name last-name gender-type-id marital-status-id marital-status-from marital-status-thru)
+	(save-person first-name middle-name last-name gender-type-id marital-status-id marital-status-from marital-status-thru))

@@ -8,6 +8,14 @@
 	(create-tables)
 	(load-data))
 
+(defun select-all-marital-status-types ()
+	"Return a list of all marital status types and their id's"
+	(query (:select 'id 'name :from 'marital_status_types) :plists))
+
+(defun select-all-gender-types ()
+	"Return a list of all gender types and their id's"
+	(query (:select 'id 'name :from 'gender_types) :plists))
+
 (defun people-and-organizations-query ()
 	"Create a list of people and organizations"
 	(query (:order-by 
@@ -63,12 +71,13 @@
 																 'party_id party-id
 																 'name name)))))
 
-(defun insert-person (first-name middle-name last-name)
+(defun insert-person (first-name middle-name last-name gender-type-id marital-status-type-id marital-status-from &optional (marital-status-thru :null))
 	"Insert a person record into the database."
 	(with-transaction ()
 			(let 
 					( ( party-id (query ( :insert-into 'parties :set 
 																						 'type_id (find-party-type-id "Person")
+																						 'gender_type_id gender-type-id
 																						 'version 0
 																						 :returning 'id) :single)))
 				( execute ( :insert-into 'party_names :set
@@ -82,7 +91,12 @@
 				( execute ( :insert-into 'party_names :set
 																 'name_type_id (find-name-type-id "Last")
 																 'party_id party-id
-																 'name last-name)))))
+																 'name last-name))
+				( execute ( :insert-into 'marital_statuses :set
+																 'party_id party-id
+																 'marital_status_type_id marital-status-type-id
+																 'from_date marital-status-from 
+																 'thru_date marital-status-thru)))))
 
 
 (defun update-organization ( organization-id name type-id) 
