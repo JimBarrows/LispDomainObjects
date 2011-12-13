@@ -71,13 +71,14 @@
 																 'party_id party-id
 																 'name name)))))
 
-(defun insert-person (first-name middle-name last-name gender-type-id marital-status-type-id marital-status-from &optional (marital-status-thru :null))
+(defun insert-person (first-name middle-name last-name gender-type-id birthdate marital-status-type-id marital-status-from &optional (marital-status-thru :null))
 	"Insert a person record into the database."
 	(with-transaction ()
 			(let 
 					( ( party-id (query ( :insert-into 'parties :set 
 																						 'type_id (find-party-type-id "Person")
 																						 'gender_type_id gender-type-id
+																						 'birthdate birthdate
 																						 'version 0
 																						 :returning 'id) :single)))
 				( execute ( :insert-into 'party_names :set

@@ -25,7 +25,8 @@
 										( ( id :type serial :primary-key t)
 											( version :type integer )
 											( type_id :type bigint )
-											( gender_type_id :type bigint))))
+											( gender_type_id :type bigint)
+											( birthdate :type (or db-null date)))))
 	( execute
 		( :create-table party_names
 										( ( name_type_id :type bigint :references (name_types :cascade :cascade) )

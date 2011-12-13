@@ -87,6 +87,7 @@
 						(input-text-field "middle-name" "Middle Name" "" middle-name-error) 
 						(input-text-field "last-name" "Last Name" "" last-name-error) 
 						(type-select-field "gender-type-id" "Gender" (select-all-gender-types) :selected (getf person :gender))
+						(input-date-field "birthdate" "Birthdate" "")
 						(type-select-field "marital-status-id" 
 															 "Marital Status" (select-all-marital-status-types) :selected (getf person :marital-status-type))
 						(input-date-field "marital-status-from" "From" "")
@@ -105,7 +106,7 @@
 						(update-organization organization-id name type-id))
 				(hunchentoot:redirect *people-and-organizations-url*)))))
 
-(defun save-person ( first-name middle-name last-name gender-type-id marital-status-id marital-status-from marital-status-thru &optional (person-id 0 person-id-p))
+(defun save-person ( first-name middle-name last-name gender-type-id birthdate marital-status-id marital-status-from marital-status-thru &optional (person-id 0 person-id-p))
 	"Validates the parameters and inserts the records into the database."
 	(let ((first-name (string-trim " " first-name))
 				(middle-name (string-trim " " middle-name))
@@ -117,7 +118,7 @@
 						(progn
 							(if person-id-p
 									(update-organization first-name middle-name last-name person-id)
-									(insert-person first-name middle-name last-name gender-type-id marital-status-id marital-status-from (if (equal "" marital-status-thru) :null marital-status-thru)))
+									(insert-person first-name middle-name last-name gender-type-id birthdate marital-status-id marital-status-from (if (equal "" marital-status-thru) :null marital-status-thru)))
 							(hunchentoot:redirect *people-and-organizations-url*)))))
 
 (defun delete-organization ( organization-id)
