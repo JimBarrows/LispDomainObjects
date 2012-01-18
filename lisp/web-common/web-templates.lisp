@@ -20,9 +20,6 @@
 (defvar *menus* nil
 "List of menus to add to the main toolbar")
 
-(defparameter *page-title* "MBMS"
-"The title that goes in the head tags, and the main menu bar")
-
 (defun primary-key-field (name value)
 "Generates a hidden form field for a pimary key."
 (cl-who:with-html-output (*standard-output* nil :indent t)
@@ -141,10 +138,6 @@
 		(:link :href (first css-list) :rel "stylesheet" :type "text/css")
 		(css-links (rest css-list)))))
 
-(defun set-page-title ( title)
-"Creates the html necessary to output a page title"
-(setf *page-title* title))
-
 (defun input-date-field ( name label value &optional error-message)
 	"Creates a date box, with optional error message"
 	(cl-who:with-html-output (*standard-output* nil :indent t)
@@ -155,15 +148,14 @@
 					(unless (null error-message)
 						(htm (:span :class "help-inline" (str error-message)))))))
 
-
-(defmacro main-template (&body body)
+(defmacro main-template ((page-title) &body body)
 	"Wraps the body provided in an html template"
 	`(cl-who:with-html-output-to-string 
 			 (*standard-output* nil :prologue t :indent t) 
 		 (:html
 			(:head 
 			 (:meta :charset "utf-8")
-			 (:title (cl-who:fmt "~a - ~a" *application-name* *page-title*))
+			 (:title `(cl-who:fmt "~a - ~a" *application-name* ',page-title))
 			 (css-links *css-files*)
 			 (javascript-links *javascript-files*)
 			 (:script :type "text/javascript"
@@ -187,7 +179,8 @@
 						 (:div :class "container"
 									 (:div :class "content"
 												 (:div :class "page-header"
-															 (:h1 (cl-who:str *page-title*)))
+															 (:h1 (cl-who:str page-title)))
 												 ,@body))
 						 (:script :type "text/javascript" 
 											(str (ps (chain ($ ".date") (datepicker)))))))))
+

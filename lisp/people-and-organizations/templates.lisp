@@ -2,8 +2,7 @@
 
 (defun people-and-organizations-list ()
 	"Creates a list of people and organizations"
-;	(set-page-title "People and Organizations")
-	(main-template
+	(main-template (:page-title "People and Organizations")
 	 (:div :class "content"
 				 (add-button *add-organization-url* "Organization")
 				 (add-button *add-person-url* "Person")
@@ -52,11 +51,9 @@
 
 (defun organization-form ( &key (organization-id 0 organization-id-p) name-error-message)
 	"Creates the basic template to add an organization. name-error-message is optional."
-	(if organization-id-p
-			(set-page-title "Edit Organization")
-			(set-page-title "Add Organization"))
-	(let ( (organization (find-organization organization-id)))
-		(main-template 
+	(let ((organization (find-organization organization-id))
+				(page-title (if organization-id-p "Edit Organization" "Add Organization")))
+		(main-template (:page-title page-title) 
 			(:form :action *save-organization-url* :method "post"
 						 (if organization-id-p 
 								 (primary-key-field "organization-id" organization-id))
@@ -75,11 +72,9 @@
 										last-name-error 
 										marital-status-date-range-error)
 	"Create a form for a person"
-	(if person-id-p
-		(set-page-title "Edit Person")
-		(set-page-title "Add Person"))
-	(let (( person (find-person person-id)))
-		(main-template
+	(let (( person (find-person person-id))
+				(page-title (if person-id-p "Edit Person" "Add Person")))
+		(main-template (:page-title page-title)
 		 (:form :action *save-person-url* :method "post"
 						(if person-id-p
 								(primary-key-field "person-id" person-id))
@@ -96,7 +91,7 @@
 											 (:button :class "btn primary" :name "save" :type "submit" "Save")))))))
 
 (defun save-organization ( organization-id name type-id)
-"Saves an organization to the database, sets a message and returns to the list"
+"Saves an organization to the database sets a message and returns to the list"
 (let (( name (string-trim " " name)))
 	(if (equal "" name) 
 			(organization-form :name-error-message "Name is required")
@@ -122,7 +117,7 @@
 							(hunchentoot:redirect *people-and-organizations-url*)))))
 
 (defun delete-organization ( organization-id)
-"Deletes an organization to the database, sets a message and returns to the list"
+"Deletes an organization to the database sets a message and returns to the list"
 (if (null organization-id)
 						(print "woops, no id")
 						(delete-from-organization organization-id))

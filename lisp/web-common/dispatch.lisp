@@ -9,8 +9,7 @@
 (setf *lisp-warnings-log-level* :info)
 
 (defun main-page()	
-	(set-page-title "Main")
-	(main-template ))
+	(main-template (:page-title "Main")))
 		
 
 (setq *default-handler* 'main-page)
