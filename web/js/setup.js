@@ -1,0 +1,2 @@
+function setup_load() {
+}
