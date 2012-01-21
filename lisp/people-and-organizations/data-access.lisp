@@ -2,12 +2,6 @@
 
 (in-package :people-and-organizations)
 
-(defun build-database () 
-	"Builds the database, from scratch, by dropping everything first, then creating everything and loading the initial data"
-	(drop-tables)
-	(create-tables)
-	(load-data))
-
 (defun select-all-marital-status-types ()
 	"Return a list of all marital status types and their id's"
 	(query (:select 'id 'name :from 'marital_status_types) :plists))
