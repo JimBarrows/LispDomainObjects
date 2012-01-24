@@ -148,14 +148,14 @@
 					(unless (null error-message)
 						(htm (:span :class "help-inline" (str error-message)))))))
 
-(defmacro main-template ((page-title) &body body)
+(defmacro main-template ( (&key page-title) &body body)
 	"Wraps the body provided in an html template"
 	`(cl-who:with-html-output-to-string 
 			 (*standard-output* nil :prologue t :indent t) 
 		 (:html
 			(:head 
 			 (:meta :charset "utf-8")
-			 (:title `(cl-who:fmt "~a - ~a" *application-name* ',page-title))
+			; (:title `(cl-who:fmt "~a - ~a" *application-name* ',@page-title))
 			 (css-links *css-files*)
 			 (javascript-links *javascript-files*)
 			 (:script :type "text/javascript"
@@ -178,9 +178,9 @@
 																				 (menu *menus*))))))
 						 (:div :class "container"
 									 (:div :class "content"
-												 (:div :class "page-header"
-															 (:h1 (cl-who:str page-title)))
-												 ,@body))
+;												 (:div :class "page-header"
+;															 (:h1 (cl-who:str ,@page-title)))
+												 ,@body)); ))))
 						 (:script :type "text/javascript" 
 											(str (ps (chain ($ ".date") (datepicker)))))))))
 
