@@ -15,11 +15,11 @@
 							 (:file "web-common/twitter-bootstrap")
 							 (:file "web-common/web-utils")
 							 (:file "web-common/web-templates")
-							 (:file "web-common/dispatch")
                (:file "people-and-organizations/data-access")
                (:file "people-and-organizations/data-load")
 							 (:file "people-and-organizations/data-setup")
 							 (:file "people-and-organizations/models")
                (:file "people-and-organizations/templates")
-							 (:file "people-and-organizations/url-dispatch")))
+							 (:file "people-and-organizations/url-dispatch")
+							 (:file "bootstrap")))
 
