@@ -21,5 +21,6 @@
 							 (:file "people-and-organizations/models")
                (:file "people-and-organizations/templates")
 							 (:file "people-and-organizations/url-dispatch")
+							 (:file "business/business")
 							 (:file "bootstrap")))
 

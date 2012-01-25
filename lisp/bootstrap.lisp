@@ -14,9 +14,9 @@
 
 (setq *default-handler* 'main-page)
 
-(push( create-folder-dispatcher-and-handler "/js/" "../javascript/") *dispatch-table*)
-(push( create-folder-dispatcher-and-handler "/img/" "../img/") *dispatch-table*)
-
+(push( create-folder-dispatcher-and-handler "/js/" "../web/javascript/") *dispatch-table*)
+(push( create-folder-dispatcher-and-handler "/img/" "../web/img/") *dispatch-table*)
+(push( create-folder-dispatcher-and-handler "/business-setup/" "../web/") *dispatch-table*)
 (defparameter *edit-image* "/img/silk/pencil.png")
 (defparameter *delete-image* "/img/silk/delete.png")
 

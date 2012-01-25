@@ -12,19 +12,20 @@
 	( execute 
 		( :create-table name_types 
 										( ( id :type serial :primary-key t)
-											( version :type integer )
 											( name :type string ))))
 	( execute 
 		( :create-table party_types 
 										( ( id :type serial :primary-key t)
-											( version :type integer )
 											( name :type string )
 											( parent :type (or db-null bigint)))))
 	( execute  
 		( :create-table parties  
 										( ( id :type serial :primary-key t)
-											( version :type integer )
 											( type_id :type bigint )
+											( name :type string)
+											( first_name :type string)
+											( middle_name :type string)
+											(last_name :type string)
 											( gender_type_id :type bigint)
 											( birthdate :type (or db-null date)))))
 	( execute
@@ -37,6 +38,7 @@
 		( :create-table marital_status_types
 										( ( id :type serial :primary-key t)
 											( name :type string))))
+
 	( execute
 		( :create-table marital_statuses
 										( (from_date :type date)
@@ -49,10 +51,28 @@
 		( :create-table gender_types
 										( ( id :type serial :primary-key t)
 											( name :type string))))
+
+	( execute
+		( :create-table party_role_types
+										( ( id :type serial :primary-key t)
+											( name :type string )
+											( parent :type (or db-null bigint)))))
+
+	( execute
+		( :create-table party_roles
+										((party_role_type_id :type bigint :references (party_role_types :cascade :cascade))
+										 (party_id :type bigint :references (parties :cascade :cascade))
+										 (from_date :type date)
+										 (thru_date :type (or db-null date)))))
+
 )
 
 (defun drop-tables()
 	"Drop all tables"
+	( execute
+		( :drop-table :if-exists 'party_roles  ))
+	( execute
+		( :drop-table :if-exists 'party_role_types  ))
 	( execute
 		( :drop-table :if-exists 'party_names  ))
 	( execute

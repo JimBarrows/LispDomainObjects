@@ -38,9 +38,9 @@
 ;	(:use :cl :postmodern :s-sql :party)
 ;	(:export save-product list-products))
 
-;(defpackage business
-;	(:use :cl :party :postmodern :s-sql)
-;	(:export find-business))
+(defpackage business
+	(:use :cl :people-and-organizations :database-utils :postmodern :s-sql)
+	(:export *business* find-business))
 
 ;(defpackage jquery-utils
 ;	(:use :cl :parenscript)
