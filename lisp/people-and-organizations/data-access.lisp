@@ -153,16 +153,47 @@
 	"Retrieve a list of the roles in the roles table"
 	(query (:select 'id 'description :from 'roles)))
 
+(defun find-role-by-name-query ( name)
+	(query (:select 'id 'name 'parent :from 'party_role_types :where (:= 'name '$1)) name :plist))
+
+(defun find-role-by-name( name)
+	"Finds a role with the given name"
+	(let 
+			((p (convert-role-plist-to-struct (find-role-by-name-query name))))
+		(setf (role-children p) (children-of-role (role-id p)))
+		p))
+
+(defun convert-role-plist-to-struct ( role-plist)
+	(make-role :id (getf role-plist :id) :description (getf role-plist :name) :parent (getf role-plist :parent) :children nil))
+
 (defun children-of-role( role-id)
 	"returns the children of a role"
-	(query (concatenate 'string "with recursive role_children(id, description, parent) as "
-											"( select id, description, parent "
-											"from roles where id=$1 "
-											"union all select r.id, r.description, r.parent "
-											"from role_children rc, roles r "
-											"where r.parent = rc.id) "
-											"select id, description, parent from role_children where id <> $1 order by parent, description, id") role-id :alists))
+	(mapcar #'convert-role-plist-to-struct 
+					(query ( :select 'id 'name 'parent 
+													 :from 'party_role_types 
+													 :where (:= 'parent '$1)) role-id :plists)))
 
+;concatenate 'string "with recursive role_children(id, name, parent) as "
+;															"( select id, name, parent "
+;															"from party_role_types where id=$1 "
+;															"union all select r.id, r.name, r.parent "
+;															"from role_children rc, party_role_types r "
+;															"whexre r.parent = rc.id) "
+;															"select id, name, parent from role_children where id <> $1 order by parent, name, id") role-id :plists)))
+
+(defun load-person-roles ()
+	"Load all the person roles, and the children"
+	(let* ((person (find-role-by-name "Person"))
+				 (children (children-of-role (role-id person))))
+		(setf (role-children person) children)
+		person))
+
+(defun load-organization-roles ()
+	"Load the roles, and children for an organization"
+	(let* ((organization (find-role-by-name "Organization"))
+				 (children (children-of-role (role-id organization))))
+		(setf (role-children organization) children)
+		organization))
 
 (defun relationships-list()
 	"Retrieve a list of relationships from the relationships table."

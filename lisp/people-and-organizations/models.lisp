@@ -2,34 +2,16 @@
 
 (in-package :people-and-organizations)
 
-; This maps to 2 tables, on is classification-type (id, description) and party-classification
-(defstruct classification
-	from-date
-	thru-date
-	description)
 
-; Represents gender type, which could normally be M/F, but could also handle the other classifications as well
-(defstruct gender-type
-	id
-	description)
+(defclass organization (classifiable)
+	"Represents a group of 1 or more people.  Could be a corporation, club, informal group etc"
+	((id)
+	(name)
+	(classifications)
+	(roles)))
 
-(defstruct organization
-	id
-	name
-	classifications
-	roles)
-
-(defstruct (informal-organization
-						 (:include organization))
-	description)
-
-; Any organization that has a tax-id-num
-(defstruct (legal-organization
-						 (:include organization))
-	federal-tax-id-number)
-
-(defstruct person
-	id
+(defclass person (classifiable)
+	(id
 	first-name
 	middle-name
 	last-name
@@ -39,53 +21,43 @@
 	gender
 	birthdate
 	classification-list
-	role-list)
+	role-list))
 
-;People and organization play many roles, and at different times
-;the roles the system will use in logic will inherit from this role and mapping systems should deal with this,
-;however it's not necessary that every role type inherit from this in the code.  If the super/sub type differentiation doesn't
-;matter then it's not necessary to have a type.
+(defclass classification ()
+	"Represents a classification for a party (person or organization"
+	((id)
+	 ( description)))
+
+(defclass classifiable ()
+	"Base class for a person or organization to allow them to be classified"
+	(( party)
+	 ( classification)
+	 (from-date)
+	 (thru-date)))
+
+; Represents gender type, which could normally be M/F, but could also handle the other classifications as well
+(defclass gender-type ()
+	((id)
+	(description)))
+
+;People and organization play many roles, and at different times.
+;Some roles are general (organization vs person), and some more specific.
 (defstruct role
 	id
 	from-date
 	thru-date
-	description)
+	description
+	parent
+	children)
 
-(defstruct (person-role
-						 (:include role)))
+(defclass informal-organization (organization)
+	"An informal group of friends, a club with no legal standing etc."
+	((description)))
 
-(defstruct (organization-role
-						 (:include role)))
+; Any organization that has a tax-id-num
+(defclass legal-organization	 (organization)
+	"An oranization that has legal standing, corporation, non-profit etc."
+	federal-tax-id-number)
 
-(defstruct (organization-unit-role
-						 (:include organization-role)))
-
-;This is for expansion without having to code new types
-(defstruct (other-organization-role
-						 (:include organization-unit-role)))
-
-(defstruct (parent-organization-role
-						 (:include organization-unit-role)))
-
-(defstruct (subsidiary-role
-						 (:include organization-unit-role)))
-
-(defstruct (department-role
-						 (:include organization-unit-role)))
-
-(defstruct (division-role
-						 (:include organization-unit-role)))
-
-(defstruct (internal-organization
-						 (:include organization-role)))
-
-(defstruct (distribution-channel-role
-						 (:include organization-role)))
-
-(defstruct (agent-role
-						 (:include distribution-channel-role)))
-
-(defstruct (distributor-role
-						 (:include distribution-channel-role)))
-
-;(defmethod is-a ((child role) (parent role))
+(defparameter *person-roles* (load-person-roles))
+(defparameter *organization-roles* (load-organization-roles))
