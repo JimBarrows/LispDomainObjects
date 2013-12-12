@@ -40,15 +40,15 @@
 	((id)
 	(description)))
 
+(defclass role ()
 ;People and organization play many roles, and at different times.
 ;Some roles are general (organization vs person), and some more specific.
-(defstruct role
-	id
-	from-date
-	thru-date
-	description
-	parent
-	children)
+	((id)
+	(from-date)
+	(thru-date)
+	(description)
+	(parent)
+	(children)))
 
 (defclass informal-organization (organization)
 ;	"An informal group of friends, a club with no legal standing etc."
